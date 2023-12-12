@@ -1,6 +1,5 @@
 import Koa from 'koa'
 
-// @ts-expect-error - any errors
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function handleError(ctx: Koa.ParameterizedContext<any>, next: Koa.Next) {
 	try {

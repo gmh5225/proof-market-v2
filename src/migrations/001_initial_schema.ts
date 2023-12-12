@@ -118,7 +118,7 @@ export async function up(knex: Knex): Promise<void> {
 
 	await knex.schema.createTable('user',  function(table) {
 		table.increments('id')
-		table.integer('login').unsigned().notNullable()
+		table.integer('login').unsigned().notNullable().unique()
 		table.integer('password').unsigned().notNullable()
 		table.bigint('balance').unsigned().notNullable().defaultTo(0)
 		table.timestamp('created_at').notNullable()

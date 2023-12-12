@@ -3,7 +3,6 @@ import {UnauthorizedError} from "../../handler/error/error";
 import jwt from "jsonwebtoken";
 import {jwtSecret, saltRounds} from "../../config/props";
 import bcrypt from "bcrypt";
-import {UserInfo} from "./user";
 
 export function decodeJwt(request: Application.Request): UserInfo {
     const authToken = request.header['Authorization'] as string | undefined;
@@ -24,4 +23,9 @@ export async function hashPassword(password: string) {
 
 export async function checkPassword(password: string, hashedPassword: string) {
     return await bcrypt.compare(password, hashedPassword)
+}
+
+export interface UserInfo {
+    id: number,
+    login: string,
 }

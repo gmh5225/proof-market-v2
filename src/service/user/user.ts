@@ -4,7 +4,7 @@ import {SigninRequest} from '../../handler/user/signin'
 import jwt from 'jsonwebtoken'
 import {jwtSecret} from '../../config/props'
 import {checkPassword, hashPassword} from './hash'
-import {BadRequestError} from '../../handler/error/error'
+import {BadRequestError, UnauthorizedError} from '../../handler/error/error'
 
 export async function createUser(user: SignupRequest): Promise<UserEntity> {
     const newUser: UserEntity = {
@@ -23,18 +23,21 @@ export async function createUser(user: SignupRequest): Promise<UserEntity> {
     }
 }
 
-export async function login(request: SigninRequest): Promise<string> {
+export async function login(request: SigninRequest): Promise<AuthUser> {
     const user = await dbClient<UserEntity>('user')
 		.where('login', '=', request.login)
 		.first()
     if (!user || !(await checkPassword(request.password, user.password))) {
-        throw new BadRequestError('Invalid credentials')
+        throw new UnauthorizedError('Invalid credentials')
     }
     const payload = {
         id: user.id,
         login: user.login,
     }
-    return jwt.sign(payload, jwtSecret)
+    return {
+        id: user.id!,
+        jwt: jwt.sign(payload, jwtSecret)
+    }
 }
 
 export async function existsByLogin(login: String): Promise<boolean> {
@@ -55,7 +58,7 @@ export interface UserEntity {
     updatedAt: Date | null,
 }
 
-export interface UserInfo {
+export interface AuthUser {
     id: number,
-    login: string,
+    jwt: string,
 }

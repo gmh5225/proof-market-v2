@@ -3,10 +3,7 @@ import {login} from '../../service/user/user'
 
 export async function singin(ctx: Application.ParameterizedContext) {
 	const request: SigninRequest = ctx.request.body as SigninRequest
-	const jwt = await login(request)
-	ctx.body = {
-		jwt: jwt,
-	}
+	ctx.body = await login(request)
 }
 
 export interface SigninRequest {
