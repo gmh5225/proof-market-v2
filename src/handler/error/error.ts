@@ -5,6 +5,7 @@ export async function handleError(ctx: Koa.ParameterizedContext<any>, next: Koa.
 	try {
 		await next()
 	} catch (err) {
+		console.log(err)
 		if (err instanceof ApplicationError) {
 			ctx.status = err.status
 			ctx.body = {

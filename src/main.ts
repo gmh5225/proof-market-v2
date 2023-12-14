@@ -3,6 +3,8 @@ import Koa from 'koa'
 import {route} from './route/route'
 import bodyParser from 'koa-bodyparser'
 import {handleError} from './handler/error/error'
+import yamljs from 'yamljs'
+import {koaSwagger} from "koa2-swagger-ui";
 
 async function migrateDb() {
 	try {
@@ -14,12 +16,18 @@ async function migrateDb() {
 	}
 }
 
+function swaggerUi(): Koa.Middleware {
+	const spec = yamljs.load('./openapi.yaml');
+	return koaSwagger({ swaggerOptions: { spec }})
+}
+
 function buildApp() {
 	const app = new Koa()
-	app.use(route.routes())
-		.use(route.allowedMethods())
+	app.use(route.allowedMethods())
 		.use(bodyParser())
 		.use(handleError)
+		.use(swaggerUi())
+		.use(route.routes())
 	return app
 }
 

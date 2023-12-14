@@ -1,155 +1,159 @@
 import { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
-	await knex.schema.createTable('proof', table => {
-		table.increments('id')
-		table.string('proof').notNullable()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-	})
-
-	await knex.schema.createTable('worker', table => {
-		table.increments('id')
-		table.float('rating').notNullable()
-		table.integer('capacity').unsigned().notNullable()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-	})
-
-	await knex.schema.createTable('bid_status', table => {
-		table.increments('id')
-		table.string('name').notNullable()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-	})
-
-	await knex.schema.createTable('ask_status', table => {
-		table.increments('id')
-		table.string('name').notNullable()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-	})
-
-	await knex.schema.createTable('statement', table => {
-		table.increments('id').notNullable()
-		table.string('description').notNullable()
-		table.string('input_description').notNullable()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-	})
-
-	await knex.schema.createTable('statement_hierarchy', table => {
-		table.increments('id')
-		table.integer('statement_id').unsigned().notNullable()
-		table.integer('child_id').unsigned()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-
-		table.foreign('statement_id').references('id').inTable('statement')
-	})
-
-	await knex.schema.createTable('bid', table => {
-		table.increments('id')
-		table.integer('parent_id')
-		table.boolean('is_parent').notNullable()
-		table.integer('evaluation_time').unsigned().notNullable()
-		table.string('sender').notNullable()
-		table.integer('statement_id').unsigned().notNullable()
-		table.string('input').notNullable()
-		table.integer('cost').unsigned().notNullable()
-		table.integer('status_id').unsigned().notNullable()
-		table.integer('proof_id').unsigned()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-
-		table.foreign('statement_id').references('id').inTable('statement')
-		table.foreign('status_id').references('id').inTable('bid_status')
-		table.foreign('parent_id').references('id').inTable('bid')
-		table.foreign('proof_id').references('id').inTable('proof')
-	})
-
-	await knex.schema.createTable('bid_log', table => {
-		table.increments('id')
-		table.integer('bid_id').unsigned().notNullable()
-		table.integer('status_id').unsigned().notNullable()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-
-		table.foreign('bid_id').references('id').inTable('bid')
-		table.foreign('status_id').references('id').inTable('bid_status')
-	})
-
-	await knex.schema.createTable('ask', table => {
-		table.increments('id')
-		table.integer('worker_id').unsigned().notNullable()
-		table.integer('statement_id').unsigned().notNullable()
-		table.integer('status_id').unsigned().notNullable()
-		table.integer('generation_time').unsigned()
-		table.integer('cost').unsigned()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-
-		table.foreign('worker_id').references('id').inTable('worker')
-		table.foreign('statement_id').references('id').inTable('statement')
-		table.foreign('status_id').references('id').inTable('ask_status')
-	})
-
-	await knex.schema.createTable('ask_log', table => {
-		table.increments('id')
-		table.integer('ask_id').unsigned().notNullable()
-		table.integer('status_id').unsigned().notNullable()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-
-		table.foreign('ask_id').references('id').inTable('ask')
-		table.foreign('status_id').references('id').inTable('ask_status')
-	})
-
-	await knex.schema.createTable('bid_ask', function(table) {
-		table.increments('id')
-		table.integer('ask_id').unsigned().notNullable()
-		table.integer('bid_id').unsigned().notNullable()
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-
-		table.foreign('ask_id').references('id').inTable('ask')
-		table.foreign('bid_id').references('id').inTable('bid')
-	})
-
+	// +
 	await knex.schema.createTable('user',  function(table) {
-		table.increments('id')
-		table.integer('login').unsigned().notNullable().unique()
-		table.integer('password').unsigned().notNullable()
+		table.increments('id').primary()
+		table.timestamp('createdAt').notNullable()
+		table.timestamp('updatedAt').notNullable()
+		table.text('login').unsigned().notNullable().unique()
+		table.text('email').unsigned().unique()
+		table.text('password').unsigned().notNullable()
 		table.bigint('balance').unsigned().notNullable().defaultTo(0)
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
 		table.boolean('producer').notNullable().defaultTo(false)
 	})
 
-	await knex.schema.createTable('request',  function(table) {
-		table.increments('id')
-		table.timestamp('created_at').notNullable()
-		table.timestamp('updated_at')
-		table.text('sender').notNullable()
-		table.bigint('cost').unsigned().notNullable()
+	// +
+	await knex.schema.createTable('transaction', table => {
+		table.increments('id').primary()
+		table.timestamp('createdAt').notNullable()
+		table.timestamp('updatedAt').notNullable()
+		table.integer('senderId').notNullable()
+		table.integer('receiverId').notNullable()
+		table.float('amount').notNullable()
+
+		table.foreign('senderId').references('id').inTable('user')
+		table.foreign('receiverId').references('id').inTable('user')
+	})
+
+	// +
+	await knex.schema.createTable('producer', table => {
+		table.increments('id').primary()
+		table.timestamp('createdAt').notNullable()
+		table.timestamp('updatedAt').notNullable()
+		table.text('description').notNullable()
+		table.text('url').notNullable()
+		table.text('ethAddress').notNullable()
+		table.text('name').notNullable()
+	})
+
+	// +
+	await knex.schema.createTable('statement', table => {
+		table.increments('id').primary()
+		table.timestamp('createdAt').notNullable()
+		table.timestamp('updatedAt').notNullable()
+		table.text('name').notNullable()
+		table.text('description').notNullable()
+		table.text('url').notNullable()
+		table.text('inputDescription').notNullable()
+		table.jsonb('definition').notNullable()
+		table.text('type').notNullable()
+		table.boolean('private').notNullable()
+		table.integer('senderId').notNullable()
+		table.boolean('monitoring').notNullable()
+		table.integer('completed').notNullable()
+		table.float('avgGenerationTime').notNullable()
+		table.float('avgCost')
+
+		table.foreign('senderId').references('id').inTable('user')
+	})
+
+	// +
+	await knex.schema.createTable('proof', table => {
+		table.increments('id').primary()
+		table.timestamp('createdAt').notNullable()
+		table.timestamp('updatedAt').notNullable()
+		table.text('proof').notNullable()
+		table.float('generationTime').notNullable()
+	})
+
+	// +
+	await knex.schema.createTable('request', table => {
+		table.increments('id').primary()
+		table.timestamp('createdAt').notNullable()
+		table.timestamp('updatedAt').notNullable()
+		table.integer('statementId').unsigned().notNullable()
+		table.float('cost').notNullable()
+		table.float('evalTime').notNullable()
+		table.float('waitPeriod').notNullable()
+		table.jsonb('input').notNullable()
+		table.integer('senderId').notNullable()
 		table.text('status').notNullable()
-		table.text('statement_key').notNullable()
-		table.text('input').notNullable()
-		table.text('proof_key').notNullable()
+		table.integer('proofId').notNullable()
+
+		table.foreign('statementId').references('id').inTable('statement')
+		table.foreign('senderId').references('id').inTable('user')
+		table.foreign('proofId').references('id').inTable('proof')
+	})
+
+	// +
+	await knex.schema.createTable('requestLog', table => {
+		table.increments('id').primary()
+		table.timestamp('createdAt').notNullable()
+		table.timestamp('updatedAt').notNullable()
+		table.integer('requestId').notNullable()
+		table.text('status').notNullable()
+
+		table.foreign('requestId').references('id').inTable('request')
+	})
+
+	// +
+	await knex.schema.createTable('proposal', table => {
+		table.increments('id').primary()
+		table.timestamp('createdAt').notNullable()
+		table.timestamp('updatedAt').notNullable()
+		table.integer('statementId').notNullable()
+		table.float('cost').notNullable()
+		table.integer('senderId').notNullable()
+		table.float('waitPeriod').notNullable()
+		table.float('evalTime').notNullable()
+		table.text('status').notNullable()
+		table.timestamp('matchedTime')
+		table.integer('proofId').notNullable()
+		table.float('generationTime').notNullable()
+
+
+		table.foreign('statementId').references('id').inTable('statement')
+		table.foreign('senderId').references('id').inTable('user')
+		table.foreign('proofId').references('id').inTable('proof')
+	})
+
+	// +
+	await knex.schema.createTable('proposalLog', table => {
+		table.increments('id').primary()
+		table.timestamp('createdAt').notNullable()
+		table.timestamp('updatedAt').notNullable()
+		table.integer('proposalId').unsigned().notNullable()
+		table.text('status').notNullable()
+
+		table.foreign('proposalId').references('id').inTable('proposal')
+	})
+
+	// +
+	await knex.schema.createTable('requestProposal', function(table) {
+		table.increments('id').primary()
+		table.timestamp('createdAt').notNullable()
+		table.timestamp('updatedAt').notNullable()
+		table.integer('statementId').notNullable()
+		table.text('name').notNullable()
+		table.float('cost').notNullable()
+		table.integer('requestId').unsigned().notNullable()
+		table.integer('proposalId').unsigned().notNullable()
+
+		table.foreign('requestId').references('id').inTable('request')
+		table.foreign('proposalId').references('id').inTable('proposal')
 	})
 }
 
 export async function down(knex: Knex): Promise<void> {
-	await knex.schema.dropTableIfExists('ask')
-	await knex.schema.dropTableIfExists('worker')
-	await knex.schema.dropTableIfExists('proof')
-	await knex.schema.dropTableIfExists('ask_log')
-	await knex.schema.dropTableIfExists('bid_ask')
-	await knex.schema.dropTableIfExists('bid')
-	await knex.schema.dropTableIfExists('statement')
-	await knex.schema.dropTableIfExists('ask_status')
-	await knex.schema.dropTableIfExists('bid_status')
-	await knex.schema.dropTableIfExists('bid_log')
-	await knex.schema.dropTableIfExists('statement_hierarchy')
+	await knex.schema.dropTableIfExists('requestProposal')
+	await knex.schema.dropTableIfExists('proposalLog')
+	await knex.schema.dropTableIfExists('proposal')
+	await knex.schema.dropTableIfExists('requestLog')
 	await knex.schema.dropTableIfExists('request')
+	await knex.schema.dropTableIfExists('statement')
+	await knex.schema.dropTableIfExists('producer')
+	await knex.schema.dropTableIfExists('proof')
+	await knex.schema.dropTableIfExists('transaction')
+	await knex.schema.dropTableIfExists('user')
 }

@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  postgres:
+  db:
     container_name: proof_market_db
     image: postgres:latest
     environment:

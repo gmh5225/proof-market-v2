@@ -5,12 +5,13 @@ import {jwtSecret, saltRounds} from "../../config/props";
 import bcrypt from "bcrypt";
 
 export function decodeJwt(request: Application.Request): UserInfo {
-    const authToken = request.header['Authorization'] as string | undefined;
+    const authToken = request.header['authorization'] as string | undefined;
     if (!authToken) {
         throw new UnauthorizedError("Token required")
     }
-    jwt.verify(authToken, jwtSecret)
-    const userInfo = jwt.decode(authToken, { json: true}) as UserInfo | null
+    const token = authToken.replace('Bearer ', '')
+    jwt.verify(token, jwtSecret)
+    const userInfo = jwt.decode(token, { json: true}) as UserInfo | null
     if (!userInfo) {
         throw new UnauthorizedError("Token invalid")
     }

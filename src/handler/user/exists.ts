@@ -1,5 +1,5 @@
 import Application from "koa";
-import {existsByLogin} from "../../service/user/user";
+import {existsByLogin} from "../../repository/user";
 
 export async function exists(ctx: Application.ParameterizedContext){
     const userInfo = await existsByLogin(ctx.params.login);

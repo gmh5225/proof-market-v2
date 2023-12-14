@@ -5,28 +5,24 @@ import jwt from 'jsonwebtoken'
 import {jwtSecret} from '../../config/props'
 import {checkPassword, hashPassword} from './hash'
 import {BadRequestError, UnauthorizedError} from '../../handler/error/error'
+import {findById, findByLogin, insert, UserEntity} from "../../repository/user";
 
 export async function createUser(user: SignupRequest): Promise<UserEntity> {
     const newUser: UserEntity = {
-        id: null,
+        id: undefined,
         login: user.login,
         password: await hashPassword(user.passwd),
         createdAt: new Date(),
-        updatedAt: null,
-        balance: 0,
+        updatedAt: new Date(),
+        balance: BigInt(0),
         producer: false,
+        email: null,
     }
-    const ids = await dbClient('user').insert(newUser).returning('id')
-    return {
-        ...newUser,
-        id: ids[0],
-    }
+    return await insert(newUser)
 }
 
 export async function login(request: SigninRequest): Promise<AuthUser> {
-    const user = await dbClient<UserEntity>('user')
-		.where('login', '=', request.login)
-		.first()
+    const user = await findByLogin(request.login)
     if (!user || !(await checkPassword(request.password, user.password))) {
         throw new UnauthorizedError('Invalid credentials')
     }
@@ -40,25 +36,29 @@ export async function login(request: SigninRequest): Promise<AuthUser> {
     }
 }
 
-export async function existsByLogin(login: String): Promise<boolean> {
-	const user = await dbClient<UserEntity>('user')
-		.where('login', login)
-		.first();
-	return !(!user)
-
-}
-
-export interface UserEntity {
-    id: number | null,
-    login: string,
-    password: string,
-    balance: number,
-    producer: boolean,
-    createdAt: Date,
-    updatedAt: Date | null,
+export async function userDetails(userId: number): Promise<UserDetails> {
+    const user = await findById(userId);
+    if (!user) {
+        throw new BadRequestError('User not found')
+    }
+    return {
+        id: user.id!,
+        login: user.login,
+        balance: Number(user.balance),
+        producer: user.producer,
+        createdAt: user.createdAt,
+    }
 }
 
 export interface AuthUser {
     id: number,
     jwt: string,
+}
+
+export interface UserDetails {
+    id: number,
+    login: string,
+    balance: number,
+    producer: boolean,
+    createdAt: Date,
 }
