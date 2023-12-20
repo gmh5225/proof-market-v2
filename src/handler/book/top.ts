@@ -1,6 +1,6 @@
-import Application from "koa";
+import Application from 'koa'
 
 export async function bookTop(ctx: Application.ParameterizedContext){
-    // TODO
-    ctx.body = {}
+	// TODO
+	ctx.body = {}
 }

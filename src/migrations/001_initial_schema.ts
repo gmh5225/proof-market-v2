@@ -35,6 +35,7 @@ export async function up(knex: Knex): Promise<void> {
 		table.text('url').notNullable()
 		table.text('ethAddress').notNullable()
 		table.text('name').notNullable()
+		table.timestamp('lastAssigned')
 	})
 
 	// +

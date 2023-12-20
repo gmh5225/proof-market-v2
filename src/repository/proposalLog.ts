@@ -1,13 +1,13 @@
-import {dbClient} from "../db/client";
+import {dbClient} from '../db/client'
 
 export async function insert(entity: ProposalLongEntity): Promise<ProposalLongEntity> {
-    const txIds = await dbClient<ProposalLongEntity>('proposalLog')
-        .insert(entity)
-        .returning<number[]>('id')
-    return {
-        ...entity,
-        id: txIds[0],
-    }
+	const txIds = await dbClient<ProposalLongEntity>('proposalLog')
+		.insert(entity)
+		.returning<number[]>('id')
+	return {
+		...entity,
+		id: txIds[0],
+	}
 }
 
 export interface ProposalLongEntity {

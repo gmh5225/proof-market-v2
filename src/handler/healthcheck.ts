@@ -1,6 +1,6 @@
-import Application from "koa";
+import Application from 'koa'
 
 export async function healthcheck(ctx: Application.ParameterizedContext){
-    // TODO
-    ctx.body = {}
+	// TODO
+	ctx.body = {}
 }
