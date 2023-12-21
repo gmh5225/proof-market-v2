@@ -42,4 +42,4 @@ route.get('/proposal/:id', getProposals)
 route.post('/proposal', createProposals)
 
 route.post('/proof', submitProof)
-route.get('/proof', getProof)
+route.get('/proof/:id', getProof)
