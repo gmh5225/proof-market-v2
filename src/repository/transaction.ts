@@ -11,7 +11,7 @@ export async function insert(entity: TransactionEntity): Promise<TransactionEnti
 }
 
 export interface TransactionEntity {
-    id: number | null,
+    id: number | undefined,
     createdAt: Date,
     updatedAt: Date,
     senderId: number,

@@ -23,7 +23,7 @@ export async function registerOrUpdate(request: RegisterProducerRequest, userId:
 			userId: userId,
 			createdAt: new Date(),
 			updatedAt: new Date(),
-			id: null,
+			id: undefined,
 			lastAssigned: null,
 		}
 		return insert(newProducer)

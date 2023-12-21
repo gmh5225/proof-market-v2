@@ -11,7 +11,7 @@ export async function insert(entity: RequestProposal): Promise<RequestProposal> 
 }
 
 export interface RequestProposal {
-    id: number | null,
+    id: number | undefined,
     createdAt: Date,
     updatedAt: Date,
     statementId: number,

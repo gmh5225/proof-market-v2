@@ -34,7 +34,7 @@ export async function findByUserId(userId: number): Promise<ProducerEntity | und
 
 
 export interface ProducerEntity {
-    id: number | null,
+    id: number | undefined,
     userId: number,
     createdAt: Date,
     updatedAt: Date,

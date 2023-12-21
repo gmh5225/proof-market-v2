@@ -11,7 +11,7 @@ export async function insert(entity: StatementEntity): Promise<StatementEntity> 
 }
 
 export interface StatementEntity {
-    id: number | null,
+    id: number | undefined,
     createdAt: Date,
     updatedAt: Date,
     name: string,

@@ -18,6 +18,7 @@ export const route = new Router()
 route.get('/healthcheck', healthcheck)
 
 route.post('/user/signup', signup)
+route.post('/_open/signup', signup)
 route.post('/user/signin', singin)
 route.get('/user/balance', balance)
 route.get('/user/me', me)

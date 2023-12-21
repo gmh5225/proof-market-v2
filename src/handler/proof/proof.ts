@@ -12,7 +12,7 @@ export async function submitProof(ctx: Application.ParameterizedContext) {
 		throw new BadRequestError('Request not found')
 	}
 	const proof: ProofEntity = {
-		id: null,
+		id: undefined,
 		createdAt: new Date(),
 		updatedAt: new Date(),
 		proof: r.proof,

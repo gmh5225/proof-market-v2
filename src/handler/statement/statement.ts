@@ -59,7 +59,7 @@ export async function createStatement(ctx: Application.ParameterizedContext) {
 		type: request.type,
 		updatedAt: new Date(),
 		url: request.url,
-		id: null,
+		id: undefined,
 	}
 	const saved = await insert(entity)
 	ctx.body = {

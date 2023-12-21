@@ -17,7 +17,7 @@ export async function findById(id: number): Promise<ProofEntity | undefined> {
 }
 
 export interface ProofEntity {
-    id: number | null,
+    id: number | undefined,
     createdAt: Date,
     updatedAt: Date,
     proof: string,

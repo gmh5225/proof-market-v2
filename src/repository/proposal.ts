@@ -11,7 +11,7 @@ export async function insert(entity: ProposalEntity): Promise<ProposalEntity> {
 }
 
 export interface ProposalEntity {
-    id: number | null,
+    id: number | undefined,
     createdAt: Date,
     updatedAt: Date,
     statementId: number,

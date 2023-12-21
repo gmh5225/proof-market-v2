@@ -31,11 +31,14 @@ export async function up(knex: Knex): Promise<void> {
 		table.increments('id').primary()
 		table.timestamp('createdAt').notNullable()
 		table.timestamp('updatedAt').notNullable()
-		table.text('description').notNullable()
+		table.integer('userId').notNullable()
+		table.text('description')
 		table.text('url').notNullable()
-		table.text('ethAddress').notNullable()
-		table.text('name').notNullable()
+		table.text('ethAddress')
+		table.text('name')
 		table.timestamp('lastAssigned')
+
+		table.foreign('userId').references('id').inTable('user')
 	})
 
 	// +
@@ -52,7 +55,7 @@ export async function up(knex: Knex): Promise<void> {
 		table.boolean('private').notNullable()
 		table.integer('senderId').notNullable()
 		table.boolean('monitoring').notNullable()
-		table.integer('completed').notNullable()
+		table.boolean('completed').notNullable()
 		table.float('avgGenerationTime').notNullable()
 		table.float('avgCost')
 
@@ -75,12 +78,12 @@ export async function up(knex: Knex): Promise<void> {
 		table.timestamp('updatedAt').notNullable()
 		table.integer('statementId').unsigned().notNullable()
 		table.float('cost').notNullable()
-		table.float('evalTime').notNullable()
-		table.float('waitPeriod').notNullable()
+		table.float('evalTime')
+		table.float('waitPeriod')
 		table.jsonb('input').notNullable()
 		table.integer('senderId').notNullable()
 		table.text('status').notNullable()
-		table.integer('proofId').notNullable()
+		table.integer('proofId')
 
 		table.foreign('statementId').references('id').inTable('statement')
 		table.foreign('senderId').references('id').inTable('user')

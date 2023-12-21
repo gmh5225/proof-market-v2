@@ -11,7 +11,7 @@ export async function insert(entity: RequestLogEntity): Promise<RequestLogEntity
 }
 
 export interface RequestLogEntity {
-    id: number | null,
+    id: number | undefined,
     createdAt: Date,
     updatedAt: Date,
     requestId: number,

@@ -11,7 +11,7 @@ export async function insert(entity: ProposalLongEntity): Promise<ProposalLongEn
 }
 
 export interface ProposalLongEntity {
-    id: number | null,
+    id: number | undefined,
     createdAt: Date,
     updatedAt: Date,
     proposalId: number,

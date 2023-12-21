@@ -17,7 +17,7 @@ export async function createPayTransaction(request: PayRequest, userId: number):
 		throw new BadRequestError('Receiver account does not exist')
 	}
 	const newTx: TransactionEntity = {
-		id: null,
+		id: undefined,
 		senderId: request.sender,
 		receiverId: request.receiver,
 		amount: request.amount,

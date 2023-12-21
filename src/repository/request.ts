@@ -35,7 +35,7 @@ export async function sumTotalCostBySender(senderId: number): Promise<number> {
 }
 
 export interface RequestEntity {
-    id: number | null,
+    id: number | undefined,
     createdAt: Date,
     updatedAt: Date,
     statementId: number,
@@ -47,7 +47,6 @@ export interface RequestEntity {
     senderId: number,
     status: RequestStatus,
     proofId: number | null,
-    proposalId: number | null,
 }
 
 type TotalCostResult = {

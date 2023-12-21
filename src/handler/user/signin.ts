@@ -7,6 +7,6 @@ export async function singin(ctx: Application.ParameterizedContext) {
 }
 
 export interface SigninRequest {
-    login: string
+    username: string
     password: string
 }

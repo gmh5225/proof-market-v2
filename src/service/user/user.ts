@@ -9,7 +9,7 @@ import {findById, findByLogin, insert, UserEntity} from '../../repository/user'
 export async function createUser(user: SignupRequest): Promise<UserEntity> {
 	const newUser: UserEntity = {
 		id: undefined,
-		login: user.login,
+		login: user.user,
 		password: await hashPassword(user.passwd),
 		createdAt: new Date(),
 		updatedAt: new Date(),
@@ -21,7 +21,7 @@ export async function createUser(user: SignupRequest): Promise<UserEntity> {
 }
 
 export async function login(request: SigninRequest): Promise<AuthUser> {
-	const user = await findByLogin(request.login)
+	const user = await findByLogin(request.username)
 	if (!user || !(await checkPassword(request.password, user.password))) {
 		throw new UnauthorizedError('Invalid credentials')
 	}

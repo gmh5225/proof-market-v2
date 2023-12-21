@@ -28,18 +28,17 @@ export async function createRequest(ctx: Application.ParameterizedContext) {
 	const userInfo = decodeJwt(ctx.request)
 	const request = ctx.request.body as CreateRequestRequest
 	const entity: RequestEntity = {
-		id: null,
+		id: undefined,
 		createdAt: new Date(),
 		updatedAt: new Date(),
-		statementId: request.statement_key,
+		statementId: parseInt(request.statement_key),
 		cost: request.cost,
 		evalTime: null,
 		waitPeriod: null,
-		input: request.input,
+		input: JSON.stringify(request.input),
 		senderId: userInfo.id,
 		status: RequestStatus.NEW,
 		proofId: null,
-		proposalId: null,
 	}
 	const saved = await insert(entity)
 	ctx.body = {
@@ -52,7 +51,7 @@ export async function createRequest(ctx: Application.ParameterizedContext) {
 }
 
 export interface CreateRequestRequest {
-    statement_key: number,
+    statement_key: string,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: any,
     cost: number,
