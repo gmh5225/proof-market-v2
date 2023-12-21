@@ -20,9 +20,10 @@ export async function submitProof(ctx: Application.ParameterizedContext) {
 		producerId: userInfo.id,
 		generationTime: new Date().getTime() - request.createdAt.getTime(),
 	}
-	await insertProof(proof)
+	const saved = await insertProof(proof);
 	request.status = RequestStatus.DONE
 	request.updatedAt = new Date()
+	request.proofId = saved.id!
 	request.input = JSON.stringify(request.input)
 	await updateRequest(request)
 	ctx.body = {}
