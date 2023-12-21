@@ -14,7 +14,7 @@ export async function getProposals(ctx: Application.ParameterizedContext) {
         console.log(`Proposals ${requests}`)
         ctx.body = requests.map(r => {
             return {
-                statement_key: r.statementId,
+                statement_key: r.statementId.toString(),
             }
         })
         return
