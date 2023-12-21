@@ -19,7 +19,7 @@ export async function getRequest(ctx: Application.ParameterizedContext) {
 		status: RequestStatus[entity.status],
 		statement_key: entity.statementId,
 		cost: entity.cost,
-		proof_key: entity.proofId,
+		proof_key: entity.proofId?.toString(),
 		input: entity.input,
 	}
 }
