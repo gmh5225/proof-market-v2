@@ -34,7 +34,10 @@ export async function getProof(ctx: Application.ParameterizedContext) {
 	if (!proof) {
 		throw new BadRequestError('Proof not found')
 	}
-	ctx.body = proof.proof
+	ctx.body = {
+		id: proof.id!.toString(),
+		proof: proof.proof
+	}
 }
 
 export interface SubmitProofRequest {
