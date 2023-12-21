@@ -84,6 +84,7 @@ export async function up(knex: Knex): Promise<void> {
 		table.integer('senderId').notNullable()
 		table.text('status').notNullable()
 		table.integer('proofId')
+		table.integer('assignedId') //TEMP
 
 		table.foreign('statementId').references('id').inTable('statement')
 		table.foreign('senderId').references('id').inTable('user')

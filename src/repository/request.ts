@@ -47,6 +47,7 @@ export interface RequestEntity {
     senderId: number,
     status: RequestStatus,
     proofId: number | null,
+	assignedId: number | null,
 }
 
 type TotalCostResult = {

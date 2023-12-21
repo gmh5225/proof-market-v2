@@ -39,6 +39,7 @@ export async function createRequest(ctx: Application.ParameterizedContext) {
 		senderId: userInfo.id,
 		status: RequestStatus.NEW,
 		proofId: null,
+		assignedId: null,
 	}
 	const saved = await insert(entity)
 	ctx.body = {
