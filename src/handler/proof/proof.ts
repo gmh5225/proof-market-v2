@@ -25,7 +25,7 @@ export async function submitProof(ctx: Application.ParameterizedContext) {
 	request.updatedAt = new Date()
 	request.input = JSON.stringify(request.input)
 	await updateRequest(request)
-
+	ctx.body = {}
 }
 
 export async function getProof(ctx: Application.ParameterizedContext) {
