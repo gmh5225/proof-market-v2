@@ -19,3 +19,7 @@ export async function getProposals(ctx: Application.ParameterizedContext) {
     }
     ctx.body = []
 }
+
+export async function createProposals(ctx: Application.ParameterizedContext) {
+    ctx.body = {}
+}
