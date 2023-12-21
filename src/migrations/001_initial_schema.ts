@@ -69,6 +69,8 @@ export async function up(knex: Knex): Promise<void> {
 		table.timestamp('updatedAt').notNullable()
 		table.text('proof').notNullable()
 		table.float('generationTime').notNullable()
+		table.integer('producerId')
+		table.integer('requestId')
 	})
 
 	// +
