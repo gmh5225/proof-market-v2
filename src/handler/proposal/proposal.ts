@@ -15,6 +15,7 @@ export async function getProposals(ctx: Application.ParameterizedContext) {
                 statement_key: r.statementId,
             }
         })
+        return
     }
     ctx.body = []
 }
