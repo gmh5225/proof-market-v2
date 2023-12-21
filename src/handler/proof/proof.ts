@@ -16,7 +16,6 @@ export async function submitProof(ctx: Application.ParameterizedContext) {
 		createdAt: new Date(),
 		updatedAt: new Date(),
 		proof: r.proof,
-		proposalId: null,
 		requestId: r.request_key,
 		producerId: userInfo.id,
 		generationTime: new Date().getTime() - request.createdAt.getTime(),

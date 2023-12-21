@@ -21,7 +21,6 @@ export interface ProofEntity {
     createdAt: Date,
     updatedAt: Date,
     proof: string,
-    proposalId: number | null,
     requestId: number,
     producerId: number | null,
     generationTime: number,
