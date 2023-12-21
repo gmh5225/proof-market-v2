@@ -23,6 +23,7 @@ export async function submitProof(ctx: Application.ParameterizedContext) {
 	await insertProof(proof)
 	request.status = RequestStatus.DONE
 	request.updatedAt = new Date()
+	request.input = JSON.stringify(request.input)
 	await updateRequest(request)
 
 }
