@@ -10,8 +10,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-proof_market_pass}
     ports:
       - "15433:5432"
-#    volumes:
-#      - postgres_data:/var/lib/postgresql/data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-#volumes:
-#  postgres_data:
+volumes:
+  postgres_data:
