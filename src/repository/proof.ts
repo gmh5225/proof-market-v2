@@ -1,12 +1,12 @@
 import {dbClient} from '../db/client'
 
 export async function insert(entity: ProofEntity): Promise<ProofEntity> {
-	const txIds = await dbClient<ProofEntity>('proof')
+	const ids = await dbClient('proof')
 		.insert(entity)
-		.returning<number[]>('id')
+		.returning('id')
 	return {
 		...entity,
-		id: txIds[0],
+		id: ids[0],
 	}
 }
 
