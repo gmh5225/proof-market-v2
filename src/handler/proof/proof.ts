@@ -7,6 +7,7 @@ import {insert as insertProof, findById as findProofById, ProofEntity} from '../
 export async function submitProof(ctx: Application.ParameterizedContext) {
 	const userInfo = decodeJwt(ctx.request)
 	const r = ctx.request.body as SubmitProofRequest
+	console.log(`submitProof - ${JSON.stringify(r)}`)
 	const request = await findRequestById(r.request_key)
 	if (!request) {
 		throw new BadRequestError('Request not found')
@@ -21,10 +22,12 @@ export async function submitProof(ctx: Application.ParameterizedContext) {
 		generationTime: new Date().getTime() - request.createdAt.getTime(),
 	}
 	const saved = await insertProof(proof);
+	console.log(`save proof - ${JSON.stringify(saved)}`)
 	request.status = RequestStatus.DONE
 	request.updatedAt = new Date()
 	request.proofId = saved.id!
 	request.input = JSON.stringify(request.input)
+	console.log(`save request - ${JSON.stringify(request)}`)
 	await updateRequest(request)
 	ctx.body = {}
 }
