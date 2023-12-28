@@ -15,6 +15,7 @@ export function initRequestMatcher() {
 }
 
 export async function match() {
+	// Change logic to proposals
 	const producers = await dbClient<ProducerEntity>('producer')
 		.orderBy('lastAssigned', 'ASC')
 	if (!producers) {

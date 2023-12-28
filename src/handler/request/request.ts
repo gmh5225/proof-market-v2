@@ -41,13 +41,14 @@ export async function createRequest(ctx: Application.ParameterizedContext) {
 		proofId: null,
 		assignedId: null,
 	}
-	const saved = await insert(entity)
+	const saved = await insert(entity) // TODO: save aggregated_mode_id
 	ctx.body = {
 		_key: saved.id,
 		status: RequestStatus[saved.status],
 		statement_key: request.statement_key,
 		cost: request.cost,
 		proof_key: null,
+		aggregated_mode_id: request.aggregated_mode_id,
 	}
 }
 
@@ -56,4 +57,5 @@ export interface CreateRequestRequest {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: any,
     cost: number,
+	aggregated_mode_id: number | undefined, // TODO: save to db
 }

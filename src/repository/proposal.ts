@@ -18,10 +18,17 @@ export interface ProposalEntity {
     cost: number,
     senderId: number,
     waitPeriod: number,
-    evalTime: number,
-    status: string,
+    evalTime: number | null,
+    status: ProposalStatus,
     matchedTime: Date | null,
     requestId: number,
-    proofId: number,
-    generationTime: number,
+    proofId: number | null,
+    generationTime: number | null,
+}
+
+export enum ProposalStatus {
+    NEW,
+    CHOSEN,
+    COMPLETED,
+    EXPIRED,
 }
