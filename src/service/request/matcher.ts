@@ -25,7 +25,13 @@ export async function match() {
 		.where('status', RequestStatus.NEW)
 	console.log(`Found requests ${requests}`)
 	for (const r of requests) {
-		const producer = producers[0]
+		const noAssignedProducer = producers.find(p => p.lastAssigned == null);
+		let producer;
+		if (noAssignedProducer) {
+			producer = noAssignedProducer;
+		} else {
+			producer = producers[0]
+		}
 		r.assignedId = producer.userId
 		r.status = RequestStatus.PENDING
 		r.input = JSON.stringify(r.input)
