@@ -18,6 +18,7 @@ export async function getProposals(userId: number, filter: ProposalFilter): Prom
                 statement_key: r.statementId.toString(),
                 request_key: r.requestId!.toString(),
                 _key: r.id!.toString(),
+                aggregated_mode_id: r.aggregated_mode_id,
             }
         })
     } else {
@@ -34,6 +35,7 @@ export async function getProposals(userId: number, filter: ProposalFilter): Prom
                 statement_key: r.statementId.toString(),
                 request_key: r.id!.toString(),
                 _key: r.id!.toString(),
+                aggregated_mode_id: null,
             }
         })
     }
@@ -59,6 +61,7 @@ export async function createProposal(userId: number, request: CreateProposalRequ
         requestId: requestEntity.id!,
         proofId: null,
         generationTime: null,
+        aggregated_mode_id: request.aggregated_mode_id || null,
     } as ProposalEntity
     const saved = await insert(proposal);
     return {

@@ -1,14 +1,35 @@
 import Application from 'koa'
-import {RequestEntity, RequestStatus, insert, findById} from '../../repository/request'
+import {findById, insert, RequestEntity, RequestStatus} from '../../repository/request'
 import {decodeJwt} from '../../service/user/hash'
 import {BadRequestError} from '../error/error'
+import {dbClient} from "../../db/client";
 
-export async function getRequestsFilter(ctx: Application.ParameterizedContext) {
-	// TODO: after mvp
-	ctx.status = 404
+export async function getRequestsFilterHandler(ctx: Application.ParameterizedContext) {
+	const request = ctx.request.body as RequestFilterRequest
+	let queryBuilder = dbClient<RequestEntity>('request')
+		.where('status', RequestStatus[RequestStatus.NEW])
+		.where('assignedId', null);
+	if (request.costFrom) {
+		queryBuilder = queryBuilder.where('cost', '>=', request.costFrom!)
+	}
+	if (request.createdAtFrom) {
+		queryBuilder = queryBuilder.where('createdAt', '>=', request.createdAtFrom)
+	}
+	ctx.body = (await queryBuilder)
+		.map(r => {
+			return {
+				_key: r.id,
+				status: RequestStatus[r.status],
+				statement_key: r.statementId,
+				cost: r.cost,
+				proof_key: r.proofId?.toString(),
+				input: r.input,
+				aggregated_mode_id: r.aggregatedModeId,
+			}
+		})
 }
 
-export async function getRequest(ctx: Application.ParameterizedContext) {
+export async function getRequestHandler(ctx: Application.ParameterizedContext) {
 	const id = ctx.params.id
 	const entity = await findById(id)
 	if (!entity) {
@@ -21,10 +42,11 @@ export async function getRequest(ctx: Application.ParameterizedContext) {
 		cost: entity.cost,
 		proof_key: entity.proofId?.toString(),
 		input: entity.input,
+		aggregated_mode_id: entity.aggregatedModeId,
 	}
 }
 
-export async function createRequest(ctx: Application.ParameterizedContext) {
+export async function createRequestHandler(ctx: Application.ParameterizedContext) {
 	const userInfo = decodeJwt(ctx.request)
 	const request = ctx.request.body as CreateRequestRequest
 	const entity: RequestEntity = {
@@ -40,8 +62,9 @@ export async function createRequest(ctx: Application.ParameterizedContext) {
 		status: RequestStatus.NEW,
 		proofId: null,
 		assignedId: null,
+		aggregatedModeId: request.aggregated_mode_id || null,
 	}
-	const saved = await insert(entity) // TODO: save aggregated_mode_id
+	const saved = await insert(entity)
 	ctx.body = {
 		_key: saved.id,
 		status: RequestStatus[saved.status],
@@ -57,5 +80,10 @@ export interface CreateRequestRequest {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: any,
     cost: number,
-	aggregated_mode_id: number | undefined, // TODO: save to db
+	aggregated_mode_id: number | undefined,
+}
+
+export interface RequestFilterRequest {
+	costFrom: number | undefined,
+	createdAtFrom: Date | undefined,
 }

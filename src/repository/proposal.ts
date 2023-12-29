@@ -24,6 +24,7 @@ export interface ProposalEntity {
     requestId: number,
     proofId: number | null,
     generationTime: number | null,
+    aggregated_mode_id: number | null,
 }
 
 export enum ProposalStatus {

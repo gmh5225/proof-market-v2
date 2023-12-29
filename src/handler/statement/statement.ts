@@ -1,9 +1,9 @@
 import Application from 'koa'
-import {StatementEntity, insert} from '../../repository/statement'
+import {insert, StatementEntity} from '../../repository/statement'
 import {decodeJwt} from '../../service/user/hash'
 import {dbClient} from '../../db/client'
 
-export async function getStatement(ctx: Application.ParameterizedContext) {
+export async function getStatementHandler(ctx: Application.ParameterizedContext) {
 	const id = ctx.params.id
 	const statement = await dbClient<StatementEntity>('statement')
 		.where('id', id)
@@ -24,9 +24,10 @@ export async function getStatement(ctx: Application.ParameterizedContext) {
 	}
 }
 
-export async function getStatements(ctx: Application.ParameterizedContext) {
+export async function getStatementsHandler(ctx: Application.ParameterizedContext) {
 	const statements = await dbClient<StatementEntity>('statement')
-	const items = statements.map(e => {
+		.where('isPrivate', false)
+	ctx.body = statements.map(e => {
 		return {
 			id: e.id!,
 			name: e.name,
@@ -38,10 +39,9 @@ export async function getStatements(ctx: Application.ParameterizedContext) {
 			definition: e.definition,
 		}
 	})
-	ctx.body = items
 }
 
-export async function createStatement(ctx: Application.ParameterizedContext) {
+export async function createStatementHandler(ctx: Application.ParameterizedContext) {
 	const userInfo = decodeJwt(ctx.request)
 	const request = ctx.request.body as CreateStatementRequest
 	const entity: StatementEntity = {

@@ -4,7 +4,7 @@ import {findById as findRequestById, RequestStatus, update as updateRequest} fro
 import {BadRequestError} from '../error/error'
 import {insert as insertProof, findById as findProofById, ProofEntity} from '../../repository/proof'
 
-export async function submitProof(ctx: Application.ParameterizedContext) {
+export async function submitProofHandler(ctx: Application.ParameterizedContext) {
 	const userInfo = decodeJwt(ctx.request)
 	const r = ctx.request.body as SubmitProofRequest
 	const request = await findRequestById(r.request_key)
@@ -31,7 +31,7 @@ export async function submitProof(ctx: Application.ParameterizedContext) {
 	ctx.body = {}
 }
 
-export async function getProof(ctx: Application.ParameterizedContext) {
+export async function getProofHandler(ctx: Application.ParameterizedContext) {
 	const id = ctx.params.id
 	const proof = await findProofById(id)
 	if (!proof) {
