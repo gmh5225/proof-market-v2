@@ -19,6 +19,7 @@ export async function getProposals(userId: number, filter: ProposalFilter): Prom
                 request_key: r.requestId!.toString(),
                 _key: r.id!.toString(),
                 aggregated_mode_id: r.aggregated_mode_id,
+                status: r.status,
             }
         })
     } else {
@@ -26,8 +27,8 @@ export async function getProposals(userId: number, filter: ProposalFilter): Prom
         let builder = dbClient<RequestEntity>('request')
             .where('assignedId', userId);
         if (filter.status) {
-            builder = builder
-                .where('status', filter.status)
+                builder = builder
+                    .where('status', RequestStatus[filter.status])
         }
         const requests = await builder
         return requests.map(r => {
@@ -36,6 +37,7 @@ export async function getProposals(userId: number, filter: ProposalFilter): Prom
                 request_key: r.id!.toString(),
                 _key: r.id!.toString(),
                 aggregated_mode_id: null,
+                status: r.status,
             }
         })
     }

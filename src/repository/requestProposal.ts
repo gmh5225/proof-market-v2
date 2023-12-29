@@ -3,10 +3,10 @@ import {dbClient} from '../db/client'
 export async function insert(entity: RequestProposal): Promise<RequestProposal> {
 	const txIds = await dbClient<RequestProposal>('requestProposal')
 		.insert(entity)
-		.returning<number[]>('id')
+		.returning('id')
 	return {
 		...entity,
-		id: txIds[0],
+		id: txIds[0].id,
 	}
 }
 

@@ -3,10 +3,10 @@ import {dbClient} from '../db/client'
 export async function insert(entity: StatementEntity): Promise<StatementEntity> {
 	const txIds = await dbClient<StatementEntity>('statement')
 		.insert(entity)
-		.returning<number[]>('id')
+		.returning('id')
 	return {
 		...entity,
-		id: txIds[0],
+		id: txIds[0].id,
 	}
 }
 

@@ -27,10 +27,12 @@ export async function findById(id: number): Promise<UserEntity | undefined> {
 }
 
 export async function insert(entity: UserEntity): Promise<UserEntity> {
-	const ids = await dbClient('user').insert(entity).returning('id')
+	const ids = await dbClient<UserEntity>('user')
+		.insert(entity)
+		.returning('id')
 	return {
 		...entity,
-		id: ids[0],
+		id: ids[0].id,
 	}
 }
 

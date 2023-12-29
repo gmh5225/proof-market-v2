@@ -6,7 +6,7 @@ export async function insert(entity: ProofEntity): Promise<ProofEntity> {
 		.returning('id')
 	return {
 		...entity,
-		id: ids[0]['id'],
+		id: ids[0].id,
 	}
 }
 
