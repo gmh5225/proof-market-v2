@@ -1,3 +1,6 @@
+import {setupTracing} from "./instrumentation"
+setupTracing('proof-market-v2')
+
 import {dbClient} from './db/client'
 import Koa from 'koa'
 import {route} from './route/route'
