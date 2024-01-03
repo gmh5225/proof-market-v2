@@ -7,7 +7,8 @@ export async function getProposals(ctx: Application.ParameterizedContext) {
     const userInfo = decodeJwt(ctx.request)
     const status = ctx.query.status;
     console.log(`Proposals ${status} ${userInfo.id}`)
-    if (status == 'processing') {
+    // TODO: default statuses
+    if (status == 'processing' || !status) {
         const requests = await dbClient<RequestEntity>('request')
             .where('status', RequestStatus.PENDING)
             .where('assignedId', userInfo.id)
