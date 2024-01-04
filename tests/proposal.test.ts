@@ -8,6 +8,7 @@ describe('proposal flow', () => {
     jest.setTimeout(20000)
 
     beforeEach(async () => {
+        await down(dbClient)
         await up(dbClient)
     })
 

@@ -9,18 +9,29 @@ export async function getProposalsHandler(ctx: Application.ParameterizedContext)
     const filter = {
         status: status
     } as ProposalFilter
-    console.log(`Proposals ${status} ${userInfo.id}`)
+    console.log(`User ${userInfo.id}: get proposals by filter ${JSON.stringify(filter)}`)
+    ctx.body = await getProposals(userInfo.id, filter);
+}
+
+export async function getProposalHandler(ctx: Application.ParameterizedContext) {
+    const id = ctx.params.id
+    const userInfo = decodeJwt(ctx.request)
+    const filter = {
+        id: parseInt(id),
+    } as ProposalFilter
+    console.log(`User ${userInfo.id}: get proposals by id ${id}`)
     ctx.body = await getProposals(userInfo.id, filter);
 }
 
 export async function createProposalsHandler(ctx: Application.ParameterizedContext) {
     const userInfo = decodeJwt(ctx.request)
     const request = ctx.request.body as CreateProposalRequest
-    console.log(`Create proposal - ${request} by ${userInfo.id}`)
+    console.log(`User ${userInfo.id}: create proposal - ${JSON.stringify(request)}`)
     ctx.body = await createProposal(userInfo.id, request)
 }
 
 export interface ProposalFilter {
+    id: number | undefined,
     status: RequestStatus | undefined,
 }
 

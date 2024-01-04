@@ -7,12 +7,16 @@ import {useProposals} from "../../config/props";
 
 export async function getProposals(userId: number, filter: ProposalFilter): Promise<ProposalItem[]> {
     if (useProposals) {
-        let queryBuilder = dbClient<ProposalEntity>('proposal')
+        let builder = dbClient<ProposalEntity>('proposal')
             .where('userId', userId);
         if (filter.status) {
-            queryBuilder = queryBuilder.where('status', ProposalStatus[filter.status])
+            builder = builder.where('status', ProposalStatus[filter.status])
         }
-        const proposals = await queryBuilder
+        if (filter.id) {
+            builder = builder
+                .where('id', filter.id)
+        }
+        const proposals = await builder
         return proposals.map(r => {
             return {
                 statement_key: r.statementId.toString(),
@@ -29,6 +33,10 @@ export async function getProposals(userId: number, filter: ProposalFilter): Prom
         if (filter.status) {
                 builder = builder
                     .where('status', RequestStatus[filter.status])
+        }
+        if (filter.id) {
+            builder = builder
+                .where('id', filter.id)
         }
         const requests = await builder
         return requests.map(r => {
