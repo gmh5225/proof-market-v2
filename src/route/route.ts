@@ -10,7 +10,7 @@ import {healthcheck} from '../handler/healthcheck'
 import {registerHandler} from '../handler/producer/register'
 import {createRequestHandler, getRequestHandler, getRequestsFilterHandler} from '../handler/request/request'
 import {createStatementHandler, getStatementHandler, getStatementsHandler} from '../handler/statement/statement'
-import {createProposalsHandler, getProposalsHandler} from '../handler/proposal/proposal'
+import {createProposalsHandler, getProposalHandler, getProposalsHandler} from '../handler/proposal/proposal'
 import {getProofHandler, submitProofHandler} from '../handler/proof/proof'
 
 export const route = new Router()
@@ -38,7 +38,7 @@ route.get('/request/:id', getRequestHandler)
 route.post('/request', createRequestHandler)
 
 route.get('/proposal', getProposalsHandler)
-route.get('/proposal/:id', getProposalsHandler)
+route.get('/proposal/:id', getProposalHandler)
 route.post('/proposal', createProposalsHandler)
 
 route.post('/proof', submitProofHandler)
