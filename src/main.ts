@@ -1,3 +1,6 @@
+import {setupTracing} from "./instrumentation"
+setupTracing('proof-market-v2')
+
 import {startApp} from "./app";
 
 startApp()
