@@ -33,9 +33,11 @@ export const setupTracing = (serviceName: string) => {
         })
         provider.register()
         api.trace.getTracer(serviceName)
+        console.log('Use opentelemetry tracer');
     } else {
         const ddTracer = tracer.init({
             logInjection: true,
         })
+        console.log('Use datadog tracer');
     }
 }
