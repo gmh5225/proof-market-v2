@@ -37,6 +37,9 @@ export const setupTracing = (serviceName: string) => {
     } else {
         const ddTracer = tracer.init({
             logInjection: true,
+            service: "proof-market-v2",
+            startupLogs: true,
+            runtimeMetrics: true,
         })
         console.log('Use datadog tracer');
     }
