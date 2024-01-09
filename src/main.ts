@@ -44,7 +44,7 @@ async function startApp() {
 	const app = buildApp()
 	initTasks()
 
-	app.listen(3000)
+	app.listen(80)
 }
 
 startApp()
