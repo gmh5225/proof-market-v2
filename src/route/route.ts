@@ -7,7 +7,7 @@ import {pay} from '../handler/user/pay'
 import {me} from '../handler/user/me'
 import {bookTop} from '../handler/book/top'
 import {healthcheck} from '../handler/healthcheck'
-import {registerHandler} from '../handler/producer/register'
+import {registerProducerHandler} from '../handler/producer/register'
 import {createRequestHandler, getRequestHandler, getRequestsFilterHandler} from '../handler/request/request'
 import {createStatementHandler, getStatementHandler, getStatementsHandler} from '../handler/statement/statement'
 import {createProposalsHandler, getProposalHandler, getProposalsHandler} from '../handler/proposal/proposal'
@@ -18,16 +18,15 @@ export const route = new Router()
 route.get('/healthcheck', healthcheck)
 
 route.post('/user/signup', signup)
-route.post('/_open/signup', signup)
 route.post('/user/signin', singin)
 route.get('/user/balance', balance)
 route.get('/user/me', me)
 route.head('/user/exists/:login', exists)
-route.get('/user/pay', pay) // V2
+route.get('/user/pay', pay)
 
-route.get('/book/top', bookTop) // V2
+route.get('/book/top', bookTop)
 
-route.post('/producer', registerHandler)
+route.post('/producer', registerProducerHandler)
 
 route.get('/statement/:id', getStatementHandler)
 route.get('/statement', getStatementsHandler)

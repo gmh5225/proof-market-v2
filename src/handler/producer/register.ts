@@ -2,11 +2,12 @@ import Application from 'koa'
 import {decodeJwt} from '../../service/user/hash'
 import {registerOrUpdate} from '../../service/producer/producer'
 
-export async function registerHandler(ctx: Application.ParameterizedContext){
+export async function registerProducerHandler(ctx: Application.ParameterizedContext){
 	const userInfo = decodeJwt(ctx.request)
 	const request = ctx.request.body as RegisterProducerRequest
 	const producerEntity = await registerOrUpdate(request, userInfo.id)
 	ctx.body = {
+		userId: userInfo.id,
 		name : producerEntity.name,
 		description: producerEntity.description,
 		url: producerEntity.url,

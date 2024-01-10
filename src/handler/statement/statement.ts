@@ -63,7 +63,14 @@ export async function createStatementHandler(ctx: Application.ParameterizedConte
 	}
 	const saved = await insert(entity)
 	ctx.body = {
-		id: saved.id,
+		id: saved.id!,
+		name: saved.name,
+		description: saved.description,
+		url: saved.url,
+		input_description: saved.inputDescription,
+		type: saved.type,
+		isPrivate: saved.private,
+		definition: saved.definition,
 	}
 }
 
@@ -78,3 +85,4 @@ export interface CreateStatementRequest {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
     definition: any,
 }
+
