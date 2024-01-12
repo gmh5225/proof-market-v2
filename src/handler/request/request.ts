@@ -5,15 +5,14 @@ import {BadRequestError} from '../error/error'
 import {dbClient} from "../../db/client";
 
 export async function getRequestsFilterHandler(ctx: Application.ParameterizedContext) {
-	const request = ctx.request.body as RequestFilterRequest
 	let queryBuilder = dbClient<RequestEntity>('request')
 		.where('status', RequestStatus[RequestStatus.NEW])
 		.where('assignedId', null);
-	if (request.costFrom) {
-		queryBuilder = queryBuilder.where('cost', '>=', request.costFrom!)
+	if (ctx.query.costFrom) {
+		queryBuilder = queryBuilder.where('cost', '>=', ctx.query.costFrom!)
 	}
-	if (request.createdAtFrom) {
-		queryBuilder = queryBuilder.where('createdAt', '>=', request.createdAtFrom)
+	if (ctx.query.createdAtFrom) {
+		queryBuilder = queryBuilder.where('createdAt', '>=', ctx.query.createdAtFrom)
 	}
 	ctx.body = (await queryBuilder)
 		.map(r => {
@@ -81,9 +80,4 @@ export interface CreateRequestRequest {
     input: any,
     cost: number,
 	aggregated_mode_id: number | undefined,
-}
-
-export interface RequestFilterRequest {
-	costFrom: number | undefined,
-	createdAtFrom: Date | undefined,
 }

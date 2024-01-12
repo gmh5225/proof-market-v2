@@ -46,6 +46,31 @@ components:
           type: object
         aggregated_mode_id:
           type: number
+    ProposalItem:
+      type: object
+      properties:
+        statement_key:
+          type: number
+        request_key:
+          type: number
+        _key:
+          type: number
+        aggregated_mode_id:
+          type: number
+        status:
+          type: string
+          enum:
+            - NEW
+            - PENDING
+            - DONE
+    ProofItem:
+      type: object
+      properties:
+        id:
+          type: number
+        proof:
+          type: object
+
 paths:
   /healthcheck:
     get:
@@ -262,7 +287,7 @@ paths:
         - bearerAuth: [ ]
       responses:
         '200':
-          description: Statement
+          description: Statements
           content:
             application/json:
               schema:
@@ -325,3 +350,195 @@ paths:
           description: Invalid credentials
         '404':
           description: Request not found
+
+  /request/filter:
+    get:
+      summary: Get request by filter
+      operationId: getRequestsFilter
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: costFrom
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: createdAtFrom
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RequestItem'
+        '401':
+          description: Invalid credentials
+    post:
+      summary: Create request
+      operationId: createRequest
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statement_key:
+                  type: string
+                input:
+                  type: object
+                cost:
+                  type: number
+                aggregated_mode_id:
+                  type: number
+      responses:
+        '200':
+          description: Request created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestItem'
+        '401':
+          description: Invalid credentials
+
+  /proposal:
+    get:
+      summary: Get proposals by filter
+      operationId: getProposalsFilter
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - NEW
+              - PENDING
+              - DONE
+      responses:
+        '200':
+          description: Proposals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProposalItem'
+        '401':
+          description: Invalid credentials
+    post:
+      summary: Create proposal
+      operationId: createProposal
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request_id:
+                  type: number
+                cost:
+                  type: number
+                aggregated_mode_id:
+                  type: number
+                wait_period_in_seconds:
+                  type: number
+      responses:
+        '200':
+          description: Proposal created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProposalItem'
+        '401':
+          description: Invalid credentials
+
+  /proposal/{id}:
+    get:
+      summary: Get proposal by id
+      operationId: getProposal
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: number
+          description: Proposal Id
+      responses:
+        '200':
+          description: Proposal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProposalItem'
+        '401':
+          description: Invalid credentials
+        '404':
+          description: Proposal not found
+
+  /proof:
+    post:
+      summary: Submit proof
+      operationId: submitProof
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                proof:
+                  type: object
+                request_key:
+                  type: number
+                proposal_key:
+                  type: number
+      responses:
+        '200':
+          description: Proposal
+        '401':
+          description: Invalid credentials
+        '400':
+          description: Request not found
+
+  /proof/{id}:
+    get:
+      summary: Get proof by id
+      operationId: getProof
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: number
+          description: Proof Id
+      responses:
+        '200':
+          description: Proposal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProofItem'
+        '401':
+          description: Invalid credentials
+        '400':
+          description: Proof not found
