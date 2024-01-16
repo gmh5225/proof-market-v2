@@ -1,4 +1,4 @@
-import Router from 'koa-router'
+import KoaRouter from "@koa/router"
 import {signup} from '../handler/user/sinup'
 import {singin} from '../handler/user/signin'
 import {balance} from '../handler/user/balance'
@@ -12,8 +12,10 @@ import {createRequestHandler, getRequestHandler, getRequestsFilterHandler} from 
 import {createStatementHandler, getStatementHandler, getStatementsHandler} from '../handler/statement/statement'
 import {createProposalsHandler, getProposalHandler, getProposalsHandler} from '../handler/proposal/proposal'
 import {getProofHandler, submitProofHandler} from '../handler/proof/proof'
+import {RegisterRoutes} from "../tsoa/routes";
 
-export const route = new Router()
+export const route = new KoaRouter()
+RegisterRoutes(route)
 
 route.get('/healthcheck', healthcheck)
 
@@ -32,7 +34,7 @@ route.get('/statement/:id', getStatementHandler)
 route.get('/statement', getStatementsHandler)
 route.post('/statement', createStatementHandler)
 
-route.get('/request/filter', getRequestsFilterHandler)
+route.get('/request', getRequestsFilterHandler)
 route.get('/request/:id', getRequestHandler)
 route.post('/request', createRequestHandler)
 

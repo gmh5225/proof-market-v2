@@ -41,3 +41,9 @@ export class UnauthorizedError extends ApplicationError {
 		super('UnauthorizedError', 401, message)
 	}
 }
+
+export class NotFoundError extends ApplicationError {
+	constructor(message: string) {
+		super('NotFound', 404, message)
+	}
+}

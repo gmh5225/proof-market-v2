@@ -1,0 +1,1066 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"AuthUser": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"jwt": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"jwt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SignupRequest": {
+				"properties": {
+					"user": {
+						"type": "string"
+					},
+					"passwd": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"user",
+					"passwd"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SigninRequest": {
+				"properties": {
+					"username": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"username",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserBalanceInfo": {
+				"properties": {
+					"user": {
+						"type": "number",
+						"format": "double"
+					},
+					"balance": {
+						"type": "number",
+						"format": "double"
+					},
+					"blocked": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"user",
+					"balance",
+					"blocked"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserDetails": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"login": {
+						"type": "string"
+					},
+					"balance": {
+						"type": "number",
+						"format": "double"
+					},
+					"producer": {
+						"type": "boolean"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"login",
+					"balance",
+					"producer",
+					"createdAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TransactionInfo": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"sender": {
+						"type": "number",
+						"format": "double"
+					},
+					"receiver": {
+						"type": "number",
+						"format": "double"
+					},
+					"amount": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"sender",
+					"receiver",
+					"amount"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PayRequest": {
+				"properties": {
+					"sender": {
+						"type": "number",
+						"format": "double"
+					},
+					"receiver": {
+						"type": "number",
+						"format": "double"
+					},
+					"amount": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"sender",
+					"receiver",
+					"amount"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StatementItem": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					},
+					"input_description": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"isPrivate": {
+						"type": "boolean"
+					},
+					"definition": {}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"url",
+					"input_description",
+					"type",
+					"isPrivate",
+					"definition"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateStatementRequest": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					},
+					"input_description": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"isPrivate": {
+						"type": "boolean"
+					},
+					"definition": {}
+				},
+				"required": [
+					"name",
+					"description",
+					"url",
+					"input_description",
+					"type",
+					"isPrivate",
+					"definition"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RequestItem": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"status": {
+						"type": "string"
+					},
+					"statement_key": {
+						"type": "number",
+						"format": "double"
+					},
+					"cost": {
+						"type": "number",
+						"format": "double"
+					},
+					"proof_key": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"input": {},
+					"aggregated_mode_id": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id",
+					"status",
+					"statement_key",
+					"cost",
+					"proof_key",
+					"input",
+					"aggregated_mode_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateRequestRequest": {
+				"properties": {
+					"statement_key": {
+						"type": "number",
+						"format": "double"
+					},
+					"input": {},
+					"cost": {
+						"type": "number",
+						"format": "double"
+					},
+					"aggregated_mode_id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"statement_key",
+					"input",
+					"cost"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ProposalItem": {
+				"properties": {
+					"statement_key": {
+						"type": "string"
+					},
+					"request_key": {
+						"type": "string"
+					},
+					"_key": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"statement_key",
+					"request_key",
+					"_key"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RequestStatus": {
+				"enum": [
+					0,
+					1,
+					2
+				],
+				"type": "number"
+			},
+			"CreateProposalRequest": {
+				"properties": {
+					"request_id": {
+						"type": "string"
+					},
+					"cost": {
+						"type": "number",
+						"format": "double"
+					},
+					"aggregated_mode_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"wait_period_in_seconds": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"request_id",
+					"cost",
+					"wait_period_in_seconds"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ProofItem": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"proof": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"proof"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SubmitProofRequest": {
+				"properties": {
+					"proof": {},
+					"request_key": {
+						"type": "number",
+						"format": "double"
+					},
+					"proposal_key": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"proof",
+					"request_key",
+					"proposal_key"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RegisterProducerResponse": {
+				"properties": {
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					},
+					"ethAddress": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"userId",
+					"name",
+					"description",
+					"url",
+					"ethAddress"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RegisterProducerRequest": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					},
+					"ethAddress": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"description",
+					"url",
+					"ethAddress"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "proof-market-v2",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"paths": {
+		"/user/signup": {
+			"post": {
+				"operationId": "Signup",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthUser"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SignupRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/signin": {
+			"post": {
+				"operationId": "Signin",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthUser"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SigninRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/balance": {
+			"get": {
+				"operationId": "Balance",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserBalanceInfo"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/user/me": {
+			"get": {
+				"operationId": "Me",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDetails"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/user/exists/{login}": {
+			"get": {
+				"operationId": "Exists",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "login",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/user/pay": {
+			"post": {
+				"operationId": "Pay",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TransactionInfo"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PayRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/statement/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StatementItem"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/statement": {
+			"get": {
+				"operationId": "GetByFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/StatementItem"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateStatement",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StatementItem"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStatementRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/request/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RequestItem"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/request": {
+			"get": {
+				"operationId": "GetByFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/RequestItem"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "costFrom",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "createdAtFrom",
+						"required": true,
+						"schema": {
+							"format": "date-time",
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateRequest",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RequestItem"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateRequestRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/proposal/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProposalItem"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/proposal": {
+			"get": {
+				"operationId": "GetByFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ProposalItem"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "status",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/RequestStatus"
+						}
+					},
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateProposal",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProposalItem"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateProposalRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/proof/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProofItem"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/proof": {
+			"post": {
+				"operationId": "SubmitProof",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProofItem"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SubmitProofRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/register": {
+			"post": {
+				"operationId": "Register",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RegisterProducerResponse"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegisterProducerRequest"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

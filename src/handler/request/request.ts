@@ -52,7 +52,7 @@ export async function createRequestHandler(ctx: Application.ParameterizedContext
 		id: undefined,
 		createdAt: new Date(),
 		updatedAt: new Date(),
-		statementId: parseInt(request.statement_key),
+		statementId: request.statement_key,
 		cost: request.cost,
 		evalTime: null,
 		waitPeriod: null,
@@ -75,7 +75,7 @@ export async function createRequestHandler(ctx: Application.ParameterizedContext
 }
 
 export interface CreateRequestRequest {
-    statement_key: string,
+    statement_key: number,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: any,
     cost: number,

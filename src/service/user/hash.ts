@@ -18,6 +18,19 @@ export function decodeJwt(request: Application.Request): UserInfo {
 	return userInfo
 }
 
+export function decodeAuthToken(authToken: string | undefined): UserInfo {
+	if (!authToken) {
+		throw new UnauthorizedError('Token required')
+	}
+	const token = authToken.replace('Bearer ', '')
+	jwt.verify(token, jwtSecret)
+	const userInfo = jwt.decode(token, { json: true}) as UserInfo | null
+	if (!userInfo) {
+		throw new UnauthorizedError('Token invalid')
+	}
+	return userInfo
+}
+
 export async function hashPassword(password: string) {
 	return await bcrypt.hash(password, saltRounds)
 }

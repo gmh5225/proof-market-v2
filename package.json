@@ -34,6 +34,7 @@
     "koa2-swagger-ui": "^5.10.0",
     "node-cron": "^3.0.3",
     "pg": "^8.11.3",
+    "tsoa": "^6.0.0",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

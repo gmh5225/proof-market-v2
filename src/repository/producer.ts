@@ -40,7 +40,7 @@ export interface ProducerEntity {
     updatedAt: Date,
     description: string,
     url: string,
-    ethAddress: number,
+    ethAddress: string,
     name: string,
     lastAssigned: Date | null,
 }

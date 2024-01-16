@@ -6,6 +6,7 @@ import {initRequestMatcher} from "./service/request/matcher";
 import {route} from "./route/route";
 import bodyParser from "koa-bodyparser";
 import {handleError} from "./handler/error/error";
+import {RegisterRoutes} from "./tsoa/routes";
 
 async function migrateDb() {
     try {

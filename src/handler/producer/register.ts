@@ -19,5 +19,5 @@ export interface RegisterProducerRequest {
     name: string,
     description: string,
     url: string,
-    ethAddress: number,
+    ethAddress: string,
 }

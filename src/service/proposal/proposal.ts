@@ -75,7 +75,10 @@ export async function createProposal(userId: number, request: CreateProposalRequ
     } as ProposalEntity
     const saved = await insert(proposal);
     return {
-        id: saved.id!,
-        requestId: saved.requestId,
+        statement_key: saved.statementId.toString(),
+        request_key: saved.requestId!.toString(),
+        _key: saved.id!.toString(),
+        aggregated_mode_id: saved.aggregated_mode_id,
+        status: saved.status,
     }
 }
