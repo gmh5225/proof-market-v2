@@ -11,7 +11,7 @@ export async function insert(entity: ProducerEntity): Promise<ProducerEntity> {
 }
 
 export async function update(entity: ProducerEntity): Promise<ProducerEntity> {
-	entity.updatedAt = new Date()
+	entity.updated_at = new Date()
 	await dbClient<ProducerEntity>('producer')
 		.where('id', entity.id!)
 		.update(entity)
@@ -28,19 +28,19 @@ export async function remove(id: number){
 
 export async function findByUserId(userId: number): Promise<ProducerEntity | undefined> {
 	return dbClient<ProducerEntity>('producer')
-		.where('userId', userId)
+		.where('user_id', userId)
 		.first()
 }
 
 
 export interface ProducerEntity {
     id: number | undefined,
-    userId: number,
-    createdAt: Date,
-    updatedAt: Date,
+    user_id: number,
+    created_at: Date,
+    updated_at: Date,
     description: string,
     url: string,
-    ethAddress: string,
+    eth_address: string,
     name: string,
-    lastAssigned: Date | null,
+    last_assigned: Date | null,
 }

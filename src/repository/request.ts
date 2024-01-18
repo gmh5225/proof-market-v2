@@ -11,7 +11,7 @@ export async function insert(entity: RequestEntity): Promise<RequestEntity> {
 }
 
 export async function update(entity: RequestEntity): Promise<RequestEntity> {
-	entity.updatedAt = new Date()
+	entity.updated_at = new Date()
 	await dbClient<RequestEntity>('request')
 		.where('id', entity.id!)
 		.update(entity)
@@ -29,26 +29,26 @@ export async function findById(id: number): Promise<RequestEntity | undefined> {
 export async function sumTotalCostBySender(senderId: number): Promise<number> {
 	const costs = await dbClient<RequestEntity>('request')
 		.sum('cost as totalCost')
-		.where<TotalCostResult[]>('senderId', senderId)
-		.whereNot('status', 'completed')
+		.where<TotalCostResult[]>('sender_id', senderId)
+		.whereNot('status', 'DONE')
 	return costs[0].totalCost as number
 }
 
 export interface RequestEntity {
     id: number | undefined,
-    createdAt: Date,
-    updatedAt: Date,
-    statementId: number,
+    created_at: Date,
+    updated_at: Date,
+    statement_id: number,
     cost: number,
-    evalTime: number | null,
-    waitPeriod: number | null,
+    eval_time: number | null,
+    wait_period: number | null,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: any,
-    senderId: number,
+    sender_id: number,
     status: RequestStatus,
-    proofId: number | null,
-	assignedId: number | null,
-	aggregatedModeId: number | null,
+    proof_id: number | null,
+	assigned_id: number | null,
+	aggregated_mode_id: number | null,
 }
 
 type TotalCostResult = {

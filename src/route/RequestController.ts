@@ -24,7 +24,7 @@ export class RequestController extends Controller {
             cost: entity.cost,
             proof_key: entity.proofId,
             input: entity.input,
-            aggregated_mode_id: entity.aggregatedModeId,
+            aggregatedModeId: entity.aggregatedModeId,
         }
     }
 
@@ -84,7 +84,7 @@ export class RequestController extends Controller {
             statement_key: request.statement_key,
             cost: request.cost,
             proof_key: null,
-            aggregated_mode_id: request.aggregated_mode_id || null,
+            aggregatedModeId: request.aggregated_mode_id || null,
             input: saved.input,
         }
     }

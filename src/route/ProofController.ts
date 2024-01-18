@@ -3,7 +3,7 @@ import {Query} from "@tsoa/runtime/dist/decorators/parameter";
 import {findById as findProofById, insert as insertProof, ProofEntity} from "../repository/proof";
 import {BadRequestError} from "../handler/error/error";
 import {SubmitProofRequest} from "../handler/proof/proof";
-import {decodeAuthToken, decodeJwt} from "../service/user/hash";
+import {decodeAuthToken} from "../service/user/hash";
 import {findById as findRequestById, RequestStatus, update as updateRequest} from "../repository/request";
 
 @Route("/proof")

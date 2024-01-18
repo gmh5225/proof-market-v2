@@ -1,7 +1,8 @@
 import {dbClient} from '../db/client'
+import {RequestStatus} from "./request";
 
 export async function insert(entity: RequestLogEntity): Promise<RequestLogEntity> {
-	const txIds = await dbClient<RequestLogEntity>('requestLog')
+	const txIds = await dbClient<RequestLogEntity>('request_log')
 		.insert(entity)
 		.returning('id')
 	return {
@@ -12,8 +13,8 @@ export async function insert(entity: RequestLogEntity): Promise<RequestLogEntity
 
 export interface RequestLogEntity {
     id: number | undefined,
-    createdAt: Date,
-    updatedAt: Date,
-    requestId: number,
-    status: string,
+    created_at: Date,
+    updated_at: Date,
+    request_id: number,
+    status: RequestStatus,
 }

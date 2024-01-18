@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@koa/router": "^12.0.1",
     "@opentelemetry/api": "^1.7.0",
     "@opentelemetry/auto-instrumentations-node": "^0.40.2",
     "@opentelemetry/exporter-jaeger": "^1.19.0",
@@ -22,6 +23,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/koa": "^2.13.12",
     "@types/koa-bodyparser": "^4.3.12",
+    "@types/koa-router": "^7.4.8",
     "@types/supertest": "^6.0.2",
     "@types/yamljs": "^0.2.34",
     "bcrypt": "^5.1.1",
@@ -41,7 +43,6 @@
     "@testcontainers/postgresql": "^10.4.0",
     "@types/jest": "^29.5.11",
     "@types/jsonwebtoken": "^9.0.5",
-    "@types/koa-router": "^7.4.8",
     "@types/node": "^20.10.4",
     "@types/node-cron": "^3.0.11",
     "@typescript-eslint/eslint-plugin": "^6.13.2",

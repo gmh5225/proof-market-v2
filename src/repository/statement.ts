@@ -12,19 +12,19 @@ export async function insert(entity: StatementEntity): Promise<StatementEntity> 
 
 export interface StatementEntity {
     id: number | undefined,
-    createdAt: Date,
-    updatedAt: Date,
+    created_at: Date,
+    updated_at: Date,
     name: string,
     description: string,
     url: string,
-    inputDescription: string,
+    input_description: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     definition: any,
     type: string,
     private: boolean,
-    senderId: number,
+    sender_id: number,
     monitoring: boolean,
     completed: boolean,
-    avgGenerationTime: number,
-    avgCost: number,
+    avg_generation_time: number,
+    avg_cost: number,
 }

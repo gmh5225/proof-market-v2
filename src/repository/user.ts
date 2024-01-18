@@ -37,7 +37,7 @@ export async function insert(entity: UserEntity): Promise<UserEntity> {
 }
 
 export async function update(entity: UserEntity): Promise<UserEntity> {
-	entity.updatedAt = new Date()
+	entity.updated_at = new Date()
 	await dbClient<UserEntity>('user')
 		.where('id', entity.id!)
 		.update(entity)
@@ -48,8 +48,8 @@ export async function update(entity: UserEntity): Promise<UserEntity> {
 
 export interface UserEntity {
     id: number | undefined,
-    createdAt: Date,
-    updatedAt: Date,
+    created_at: Date,
+    updated_at: Date,
     login: string,
     password: string,
     email: string | null,

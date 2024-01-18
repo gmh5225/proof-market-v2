@@ -1,7 +1,7 @@
 import {dbClient} from '../db/client'
 
 export async function insert(entity: RequestProposal): Promise<RequestProposal> {
-	const txIds = await dbClient<RequestProposal>('requestProposal')
+	const txIds = await dbClient<RequestProposal>('request_proposal')
 		.insert(entity)
 		.returning('id')
 	return {
@@ -12,11 +12,11 @@ export async function insert(entity: RequestProposal): Promise<RequestProposal> 
 
 export interface RequestProposal {
     id: number | undefined,
-    createdAt: Date,
-    updatedAt: Date,
-    statementId: number,
+    created_at: Date,
+    updated_at: Date,
+    statement_id: number,
     name: string,
     cost: number,
-    requestId: number,
-    proposalId: number,
+    request_id: number,
+    proposal_id: number,
 }

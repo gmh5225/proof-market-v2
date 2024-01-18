@@ -71,7 +71,7 @@ export async function createProposal(userId: number, request: CreateProposalRequ
         requestId: requestEntity.id!,
         proofId: null,
         generationTime: null,
-        aggregated_mode_id: request.aggregated_mode_id || null,
+        aggregatedModeId: request.aggregated_mode_id || null,
     } as ProposalEntity
     const saved = await insert(proposal);
     return {

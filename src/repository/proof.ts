@@ -18,10 +18,10 @@ export async function findById(id: number): Promise<ProofEntity | undefined> {
 
 export interface ProofEntity {
     id: number | undefined,
-    createdAt: Date,
-    updatedAt: Date,
+    created_at: Date,
+    updated_at: Date,
     proof: string,
-    requestId: number,
-    producerId: number | null,
-    generationTime: number,
+    request_id: number,
+    producer_id: number | null,
+    generation_time: number,
 }

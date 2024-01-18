@@ -3,9 +3,9 @@ import Koa from "koa";
 import yamljs from "yamljs";
 import {koaSwagger} from "koa2-swagger-ui";
 import {initRequestMatcher} from "./service/request/matcher";
-import {route} from "./route/route";
 import bodyParser from "koa-bodyparser";
 import {handleError} from "./handler/error/error";
+import KoaRouter from "@koa/router";
 import {RegisterRoutes} from "./tsoa/routes";
 
 async function migrateDb() {
@@ -29,6 +29,8 @@ function initTasks() {
 
 export function buildApp() {
     const app = new Koa()
+    const route = new KoaRouter()
+    RegisterRoutes(route)
     app.use(route.allowedMethods())
         .use(bodyParser())
         .use(handleError)

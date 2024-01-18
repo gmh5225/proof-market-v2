@@ -23,7 +23,7 @@ export async function getRequestsFilterHandler(ctx: Application.ParameterizedCon
 				cost: r.cost,
 				proof_key: r.proofId?.toString(),
 				input: r.input,
-				aggregated_mode_id: r.aggregatedModeId,
+				aggregatedModeId: r.aggregatedModeId,
 			}
 		})
 }
@@ -41,7 +41,7 @@ export async function getRequestHandler(ctx: Application.ParameterizedContext) {
 		cost: entity.cost,
 		proof_key: entity.proofId?.toString(),
 		input: entity.input,
-		aggregated_mode_id: entity.aggregatedModeId,
+		aggregatedModeId: entity.aggregatedModeId,
 	}
 }
 
@@ -61,7 +61,7 @@ export async function createRequestHandler(ctx: Application.ParameterizedContext
 		status: RequestStatus.NEW,
 		proofId: null,
 		assignedId: null,
-		aggregatedModeId: request.aggregated_mode_id || null,
+		aggregatedModeId: request.aggregatedModeId || null,
 	}
 	const saved = await insert(entity)
 	ctx.body = {
@@ -70,7 +70,7 @@ export async function createRequestHandler(ctx: Application.ParameterizedContext
 		statement_key: request.statement_key,
 		cost: request.cost,
 		proof_key: null,
-		aggregated_mode_id: request.aggregated_mode_id,
+		aggregated_mode_id: request.aggregatedModeId,
 	}
 }
 
@@ -79,5 +79,5 @@ export interface CreateRequestRequest {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: any,
     cost: number,
-	aggregated_mode_id: number | undefined,
+	aggregatedModeId: number | undefined,
 }

@@ -1,11 +1,12 @@
 import { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
+	await knex.schema.createSchemaIfNotExists('public')
 	if (!(await knex.schema.hasTable('user'))) {
 		await knex.schema.createTable('user', function(table) {
 			table.increments('id').primary()
-			table.timestamp('createdAt').notNullable()
-			table.timestamp('updatedAt').notNullable()
+			table.timestamp('created_at').notNullable()
+			table.timestamp('updated_at').notNullable()
 			table.text('login').unsigned().notNullable().unique()
 			table.text('email').unsigned().unique()
 			table.text('password').unsigned().notNullable()
@@ -17,159 +18,154 @@ export async function up(knex: Knex): Promise<void> {
 	if (!(await knex.schema.hasTable('transaction'))) {
 		await knex.schema.createTableIfNotExists('transaction', table => {
 			table.increments('id').primary()
-			table.timestamp('createdAt').notNullable()
-			table.timestamp('updatedAt').notNullable()
-			table.integer('senderId').notNullable()
-			table.integer('receiverId').notNullable()
+			table.timestamp('created_at').notNullable()
+			table.timestamp('updated_at').notNullable()
+			table.integer('sender_id').notNullable()
+			table.integer('receiver_id').notNullable()
 			table.float('amount').notNullable()
 
-			table.foreign('senderId').references('id').inTable('user')
-			table.foreign('receiverId').references('id').inTable('user')
+			table.foreign('sender_id').references('id').inTable('user')
+			table.foreign('receiver_id').references('id').inTable('user')
 		})
 	}
 
 	if (!(await knex.schema.hasTable('producer'))) {
 		await knex.schema.createTableIfNotExists('producer', table => {
 			table.increments('id').primary()
-			table.timestamp('createdAt').notNullable()
-			table.timestamp('updatedAt').notNullable()
-			table.integer('userId').notNullable()
+			table.timestamp('created_at').notNullable()
+			table.timestamp('updated_at').notNullable()
+			table.integer('user_id').notNullable()
 			table.text('description')
 			table.text('url').notNullable()
-			table.text('ethAddress')
+			table.text('eth_address')
 			table.text('name')
-			table.timestamp('lastAssigned')
+			table.timestamp('last_assigned')
 
-			table.foreign('userId').references('id').inTable('user')
+			table.foreign('user_id').references('id').inTable('user')
 		})
 	}
 
 	if (!(await knex.schema.hasTable('statement'))) {
 		await knex.schema.createTableIfNotExists('statement', table => {
 			table.increments('id').primary()
-			table.timestamp('createdAt').notNullable()
-			table.timestamp('updatedAt').notNullable()
+			table.timestamp('created_at').notNullable()
+			table.timestamp('updated_at').notNullable()
 			table.text('name').notNullable()
 			table.text('description').notNullable()
 			table.text('url').notNullable()
-			table.text('inputDescription').notNullable()
+			table.text('input_description').notNullable()
 			table.jsonb('definition').notNullable()
 			table.text('type').notNullable()
 			table.boolean('private').notNullable()
-			table.integer('senderId').notNullable()
+			table.integer('sender_id').notNullable()
 			table.boolean('monitoring').notNullable()
 			table.boolean('completed').notNullable()
-			table.float('avgGenerationTime').notNullable()
-			table.float('avgCost')
+			table.float('avg_generation_time').notNullable()
+			table.float('avg_cost')
 
-			table.foreign('senderId').references('id').inTable('user')
+			table.foreign('sender_id').references('id').inTable('user')
 		})
 	}
 
 	if (!(await knex.schema.hasTable('proof'))) {
 		await knex.schema.createTableIfNotExists('proof', table => {
 			table.increments('id').primary()
-			table.timestamp('createdAt').notNullable()
-			table.timestamp('updatedAt').notNullable()
+			table.timestamp('created_at').notNullable()
+			table.timestamp('updated_at').notNullable()
 			table.text('proof').notNullable()
-			table.float('generationTime').notNullable()
-			table.integer('producerId')
-			table.integer('requestId')
+			table.float('generation_time').notNullable()
+			table.integer('producer_id')
+			table.integer('request_id')
 		})
 	}
 
 	if (!(await knex.schema.hasTable('request'))) {
 		await knex.schema.createTableIfNotExists('request', table => {
 			table.increments('id').primary()
-			table.timestamp('createdAt').notNullable()
-			table.timestamp('updatedAt').notNullable()
-			table.integer('statementId').unsigned().notNullable()
+			table.timestamp('created_at').notNullable()
+			table.timestamp('updated_at').notNullable()
+			table.integer('statement_id').unsigned().notNullable()
 			table.float('cost').notNullable()
-			table.float('evalTime')
-			table.float('waitPeriod')
+			table.float('eval_time')
+			table.float('wait_period')
 			table.jsonb('input').notNullable()
-			table.integer('senderId').notNullable()
+			table.integer('sender_id').notNullable()
 			table.text('status').notNullable()
-			table.integer('proofId')
-			table.integer('assignedId') //TEMP
+			table.integer('proof_id')
+			table.integer('assigned_id') //TEMP
+			table.integer('aggregated_mode_id')
 
-			table.foreign('statementId').references('id').inTable('statement')
-			table.foreign('senderId').references('id').inTable('user')
-			table.foreign('proofId').references('id').inTable('proof')
+			table.foreign('statement_id').references('id').inTable('statement')
+			table.foreign('sender_id').references('id').inTable('user')
+			table.foreign('proof_id').references('id').inTable('proof')
 		})
 	}
 
-	if (!(await knex.schema.hasTable('requestLog'))) {
-		await knex.schema.createTableIfNotExists('requestLog', table => {
+	if (!(await knex.schema.hasTable('request_log'))) {
+		await knex.schema.createTableIfNotExists('request_log', table => {
 			table.increments('id').primary()
-			table.timestamp('createdAt').notNullable()
-			table.timestamp('updatedAt').notNullable()
-			table.integer('requestId').notNullable()
+			table.timestamp('created_at').notNullable()
+			table.timestamp('updated_at').notNullable()
+			table.integer('request_id').notNullable()
 			table.text('status').notNullable()
 
-			table.foreign('requestId').references('id').inTable('request')
+			table.foreign('request_id').references('id').inTable('request')
 		})
 	}
 
 	if (!(await knex.schema.hasTable('proposal'))) {
 		await knex.schema.createTableIfNotExists('proposal', table => {
 			table.increments('id').primary()
-			table.timestamp('createdAt').notNullable()
-			table.timestamp('updatedAt').notNullable()
-			table.integer('statementId').notNullable()
+			table.timestamp('created_at').notNullable()
+			table.timestamp('updated_at').notNullable()
+			table.integer('statement_id').notNullable()
 			table.float('cost').notNullable()
-			table.integer('senderId').notNullable()
-			table.float('waitPeriod').notNullable()
-			table.float('evalTime').notNullable()
+			table.integer('sender_id').notNullable()
+			table.float('wait_period').notNullable()
+			table.float('eval_time').notNullable()
 			table.text('status').notNullable()
-			table.timestamp('matchedTime')
-			table.integer('proofId').notNullable()
-			table.float('generationTime').notNullable()
+			table.timestamp('matched_time')
+			table.integer('request_id')
+			table.integer('proof_id')
+			table.float('generation_time').notNullable()
+			table.integer('aggregated_mode_id')
 
-			table.foreign('statementId').references('id').inTable('statement')
-			table.foreign('senderId').references('id').inTable('user')
-			table.foreign('proofId').references('id').inTable('proof')
+			table.foreign('statement_id').references('id').inTable('statement')
+			table.foreign('sender_id').references('id').inTable('user')
+			table.foreign('proof_id').references('id').inTable('proof')
+			table.foreign('request_id').references('id').inTable('request')
 		})
 	}
 
-	if (!(await knex.schema.hasTable('proposalLog'))) {
-		await knex.schema.createTableIfNotExists('proposalLog', table => {
+	if (!(await knex.schema.hasTable('proposal_log'))) {
+		await knex.schema.createTableIfNotExists('proposal_log', table => {
 			table.increments('id').primary()
-			table.timestamp('createdAt').notNullable()
-			table.timestamp('updatedAt').notNullable()
-			table.integer('proposalId').unsigned().notNullable()
+			table.timestamp('created_at').notNullable()
+			table.timestamp('updated_at').notNullable()
+			table.integer('proposal_id').unsigned().notNullable()
 			table.text('status').notNullable()
 
-			table.foreign('proposalId').references('id').inTable('proposal')
+			table.foreign('proposal_id').references('id').inTable('proposal')
 		})
 	}
 
-	if (!(await knex.schema.hasTable('requestProposal'))) {
-		await knex.schema.createTableIfNotExists('requestProposal', function (table) {
+	if (!(await knex.schema.hasTable('request_proposal'))) {
+		await knex.schema.createTableIfNotExists('request_proposal', function (table) {
 			table.increments('id').primary()
 			table.timestamp('createdAt').notNullable()
 			table.timestamp('updatedAt').notNullable()
-			table.integer('statementId').notNullable()
+			table.integer('statement_id').notNullable()
 			table.text('name').notNullable()
 			table.float('cost').notNullable()
-			table.integer('requestId').unsigned().notNullable()
-			table.integer('proposalId').unsigned().notNullable()
+			table.integer('request_id').unsigned().notNullable()
+			table.integer('proposal_id').unsigned().notNullable()
 
-			table.foreign('requestId').references('id').inTable('request')
-			table.foreign('proposalId').references('id').inTable('proposal')
+			table.foreign('request_id').references('id').inTable('request')
+			table.foreign('proposal_id').references('id').inTable('proposal')
 		})
 	}
 }
 
 export async function down(knex: Knex): Promise<void> {
-	await knex.schema.dropTableIfExists('requestProposal')
-	await knex.schema.dropTableIfExists('proposalLog')
-	await knex.schema.dropTableIfExists('proposal')
-	await knex.schema.dropTableIfExists('requestLog')
-	await knex.schema.dropTableIfExists('request')
-	await knex.schema.dropTableIfExists('statement')
-	await knex.schema.dropTableIfExists('producer')
-	await knex.schema.dropTableIfExists('proof')
-	await knex.schema.dropTableIfExists('transaction')
-	await knex.schema.dropTableIfExists('user')
+	await knex.schema.dropSchemaIfExists('public', true)
 }

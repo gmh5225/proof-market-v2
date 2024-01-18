@@ -12,18 +12,18 @@ export async function insert(entity: ProposalEntity): Promise<ProposalEntity> {
 
 export interface ProposalEntity {
     id: number | undefined,
-    createdAt: Date,
-    updatedAt: Date,
-    statementId: number,
+    created_at: Date,
+    updated_at: Date,
+    statement_id: number,
     cost: number,
-    senderId: number,
-    waitPeriod: number,
-    evalTime: number | null,
+    sender_id: number,
+    wait_period: number,
+    eval_time: number | null,
     status: ProposalStatus,
-    matchedTime: Date | null,
-    requestId: number,
-    proofId: number | null,
-    generationTime: number | null,
+    matched_time: Date | null,
+    request_id: number,
+    proof_id: number | null,
+    generation_time: number | null,
     aggregated_mode_id: number | null,
 }
 

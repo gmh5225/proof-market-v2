@@ -20,7 +20,7 @@ export async function registerOrUpdate(request: RegisterProducerRequest, userId:
 	} else {
 		const newProducer: ProducerEntity = {
 			...request,
-			userId: userId,
+			user_id: userId,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			id: undefined,
