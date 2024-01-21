@@ -35,18 +35,18 @@ export class ProofController extends Controller {
         }
         const proof: ProofEntity = {
             id: undefined,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            created_at: new Date(),
+            updated_at: new Date(),
             proof: request.proof,
-            requestId: request.request_key,
-            producerId: userInfo.id,
-            generationTime: new Date().getTime() - requestEntity.createdAt.getTime(),
+            request_id: request.request_key,
+            producer_id: userInfo.id,
+            generation_time: new Date().getTime() - requestEntity.created_at.getTime(),
         }
         const saved = await insertProof(proof);
         console.log(`save proof - ${saved.id}`)
         requestEntity.status = RequestStatus.DONE
-        requestEntity.updatedAt = new Date()
-        requestEntity.proofId = saved.id!
+        requestEntity.updated_at = new Date()
+        requestEntity.proof_id = saved.id!
         requestEntity.input = JSON.stringify(requestEntity.input)
         console.log(`save request - ${JSON.stringify(request)}`)
         await updateRequest(requestEntity)

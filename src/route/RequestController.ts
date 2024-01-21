@@ -1,10 +1,10 @@
-import {Body, Controller, Get, Header, Path, Post, Route} from "tsoa";
+import {Body, Controller, Delete, Get, Header, Path, Post, Route} from "tsoa";
 import {findById, insert, RequestEntity, RequestStatus} from "../repository/request";
 import {BadRequestError} from "../handler/error/error";
 import {dbClient} from "../db/client";
 import {Query} from "@tsoa/runtime/dist/decorators/parameter";
 import {CreateRequestRequest} from "../handler/request/request";
-import {decodeAuthToken, decodeJwt} from "../service/user/hash";
+import {decodeAuthToken} from "../service/user/hash";
 
 @Route("/request")
 export class RequestController extends Controller {
@@ -20,11 +20,11 @@ export class RequestController extends Controller {
         return {
             id: entity.id!,
             status: RequestStatus[entity.status],
-            statement_key: entity.statementId,
+            statement_key: entity.statement_id,
             cost: entity.cost,
-            proof_key: entity.proofId,
+            proof_key: entity.proof_id,
             input: entity.input,
-            aggregatedModeId: entity.aggregatedModeId,
+            aggregated_mode_id: entity.aggregated_mode_id,
         }
     }
 
@@ -32,6 +32,8 @@ export class RequestController extends Controller {
     public async getByFilter(
         @Query("costFrom") costFrom: number | undefined,
         @Query("createdAtFrom") createdAtFrom: Date | undefined,
+        @Query("limit") limit: number = 10,
+        @Query("offset") offset: number = 0,
     ): Promise<RequestItem[]> {
         let queryBuilder = dbClient<RequestEntity>('request')
             .where('status', RequestStatus[RequestStatus.NEW])
@@ -42,16 +44,16 @@ export class RequestController extends Controller {
         if (createdAtFrom) {
             queryBuilder = queryBuilder.where('createdAt', '>=', createdAtFrom)
         }
-        return (await queryBuilder)
+        return (await queryBuilder.limit(limit).offset(offset))
             .map(r => {
                 return {
                     id: r.id!,
                     status: RequestStatus[r.status],
-                    statement_key: r.statementId,
+                    statement_key: r.statement_id,
                     cost: r.cost,
-                    proof_key: r.proofId,
+                    proof_key: r.proof_id,
                     input: r.input,
-                    aggregated_mode_id: r.aggregatedModeId,
+                    aggregated_mode_id: r.aggregated_mode_id,
                 }
             })
     }
@@ -64,18 +66,18 @@ export class RequestController extends Controller {
         const userInfo = decodeAuthToken(jwt)
         const entity: RequestEntity = {
             id: undefined,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            statementId: request.statement_key,
+            created_at: new Date(),
+            updated_at: new Date(),
+            statement_id: request.statement_key,
             cost: request.cost,
-            evalTime: null,
-            waitPeriod: null,
+            eval_time: null,
+            wait_period: null,
             input: JSON.stringify(request.input),
-            senderId: userInfo.id,
+            sender_id: userInfo.id,
             status: RequestStatus.NEW,
-            proofId: null,
-            assignedId: null,
-            aggregatedModeId: request.aggregated_mode_id || null,
+            proof_id: null,
+            assigned_id: null,
+            aggregated_mode_id: request.aggregatedModeId || null,
         }
         const saved = await insert(entity)
         return  {
@@ -84,8 +86,23 @@ export class RequestController extends Controller {
             statement_key: request.statement_key,
             cost: request.cost,
             proof_key: null,
-            aggregatedModeId: request.aggregated_mode_id || null,
+            aggregated_mode_id: request.aggregatedModeId || null,
             input: saved.input,
+        }
+    }
+
+    @Delete('/:id')
+    public async deleteRequest(
+        @Path("id") id: number,
+        @Header("authorization") jwt: string | undefined
+    ): Promise<void> {
+        const userInfo = decodeAuthToken(jwt)
+        const result = await dbClient<RequestEntity>('request')
+            .delete()
+            .where('id', id)
+            .where('sender_id', userInfo.id)
+        if (result < 0) {
+            throw new BadRequestError('Request not found')
         }
     }
 }

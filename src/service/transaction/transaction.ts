@@ -1,8 +1,8 @@
-import {PayRequest} from '../../handler/user/pay'
 import {BadRequestError} from '../../handler/error/error'
 import {existsById} from '../../repository/user'
 import {changeBalance, userBalanceInfo} from '../user/balance'
 import {insert, TransactionEntity} from '../../repository/transaction'
+import {PayRequest} from "../../route/UserController";
 
 export async function createPayTransaction(request: PayRequest, userId: number): Promise<TransactionInfo> {
 	if (request.sender !== userId) {
@@ -18,19 +18,19 @@ export async function createPayTransaction(request: PayRequest, userId: number):
 	}
 	const newTx: TransactionEntity = {
 		id: undefined,
-		senderId: request.sender,
-		receiverId: request.receiver,
+		sender_id: request.sender,
+		receiver_id: request.receiver,
 		amount: request.amount,
-		createdAt: new Date(),
-		updatedAt: new Date(),
+		created_at: new Date(),
+		updated_at: new Date(),
 	}
 	const tx = await insert(newTx)
 	await changeBalance(-request.amount, request.sender)
 	await changeBalance(request.amount, request.receiver)
 	return {
 		id: tx.id!,
-		sender: tx.senderId,
-		receiver: tx.receiverId,
+		sender: tx.sender_id,
+		receiver: tx.receiver_id,
 		amount: tx.amount,
 	}
 }

@@ -26,20 +26,20 @@ export async function match() {
 		.where('status', RequestStatus.NEW)
 	console.log(`Found requests ${requests}`)
 	for (const r of requests) {
-		const noAssignedProducer = producers.find(p => p.lastAssigned == null);
+		const noAssignedProducer = producers.find(p => p.last_assigned == null);
 		let producer;
 		if (noAssignedProducer) {
 			producer = noAssignedProducer;
 		} else {
 			producer = producers[0]
 		}
-		r.assignedId = producer.userId
+		r.assigned_id = producer.user_id
 		r.status = RequestStatus.PENDING
 		r.input = JSON.stringify(r.input)
-		console.log(`Assign request ${r.id} for producer ${producer.userId}`)
+		console.log(`Assign request ${r.id} for producer ${producer.user_id}`)
 		await updateRequest(r)
 		shiftProducers(producers)
-		producer.lastAssigned = new Date()
+		producer.last_assigned = new Date()
 		await updateProducer(producer)
 	}
 }

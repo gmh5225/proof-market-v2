@@ -11,8 +11,8 @@ export async function createUser(user: SignupRequest): Promise<UserEntity> {
 		id: undefined,
 		login: user.user,
 		password: await hashPassword(user.passwd),
-		createdAt: new Date(),
-		updatedAt: new Date(),
+		created_at: new Date(),
+		updated_at: new Date(),
 		balance: BigInt(0),
 		producer: false,
 		email: null,
@@ -45,7 +45,7 @@ export async function userDetails(userId: number): Promise<UserDetails> {
 		login: user.login,
 		balance: Number(user.balance),
 		producer: user.producer,
-		createdAt: user.createdAt,
+		createdAt: user.created_at,
 	}
 }
 

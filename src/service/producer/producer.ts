@@ -13,18 +13,21 @@ export async function registerOrUpdate(request: RegisterProducerRequest, userId:
 	await userUpdate(user)
 	if (producer) {
 		producer.description = request.description
-		producer.ethAddress = request.ethAddress
+		producer.eth_address = request.ethAddress
 		producer.url = request.url
 		producer.name = request.name
 		return update(producer)
 	} else {
 		const newProducer: ProducerEntity = {
-			...request,
 			user_id: userId,
-			createdAt: new Date(),
-			updatedAt: new Date(),
+			created_at: new Date(),
+			updated_at: new Date(),
 			id: undefined,
-			lastAssigned: null,
+			last_assigned: null,
+			eth_address: request.ethAddress,
+			description: request.description,
+			name: request.name,
+			url: request.url,
 		}
 		return insert(newProducer)
 	}

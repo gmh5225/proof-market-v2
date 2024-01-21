@@ -2,7 +2,7 @@ import {Body, Controller, Get, Header, Path, Post, Route} from "tsoa";
 import {dbClient} from "../db/client";
 import {insert, StatementEntity} from "../repository/statement";
 import {NotFoundError} from "../handler/error/error";
-import {decodeAuthToken, decodeJwt} from "../service/user/hash";
+import {decodeAuthToken} from "../service/user/hash";
 import {CreateStatementRequest} from "../handler/statement/statement";
 
 @Route("/statement")
@@ -24,7 +24,7 @@ export class StatementController extends Controller {
             name: statement.name,
             description: statement.description,
             url: statement.url,
-            input_description: statement.inputDescription,
+            input_description: statement.input_description,
             type: statement.type,
             isPrivate: statement.private,
             definition: statement.definition,
@@ -43,7 +43,7 @@ export class StatementController extends Controller {
                 name: e.name,
                 description: e.description,
                 url: e.url,
-                input_description: e.inputDescription,
+                input_description: e.input_description,
                 type: e.type,
                 isPrivate: e.private,
                 definition: e.definition,
@@ -58,19 +58,19 @@ export class StatementController extends Controller {
     ): Promise<StatementItem> {
         const userInfo = decodeAuthToken(jwt)
         const entity: StatementEntity = {
-            avgCost: 0,
-            avgGenerationTime: 0,
+            avg_cost: 0,
+            avg_generation_time: 0,
             completed: false,
-            createdAt: new Date(),
+            created_at: new Date(),
             definition: request.definition,
             description: request.description,
-            inputDescription: request.input_description,
+            input_description: request.input_description,
             monitoring: false,
             name: request.name,
             private: request.isPrivate,
-            senderId: userInfo.id,
+            sender_id: userInfo.id,
             type: request.type,
-            updatedAt: new Date(),
+            updated_at: new Date(),
             url: request.url,
             id: undefined,
         }
@@ -80,7 +80,7 @@ export class StatementController extends Controller {
             name: saved.name,
             description: saved.description,
             url: saved.url,
-            input_description: saved.inputDescription,
+            input_description: saved.input_description,
             type: saved.type,
             isPrivate: saved.private,
             definition: saved.definition,

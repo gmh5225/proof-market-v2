@@ -1,10 +1,9 @@
 import {Body, Controller, Get, Header, Path, Post, Route} from "tsoa";
 import {AuthUser, createUser, login, userDetails, UserDetails} from "../service/user/user";
 import {userBalanceInfo, UserBalanceInfo} from "../service/user/balance";
-import {decodeAuthToken, decodeJwt} from "../service/user/hash";
+import {decodeAuthToken} from "../service/user/hash";
 import {existsByLogin} from "../repository/user";
-import {BadRequestError, NotFoundError} from "../handler/error/error";
-import {PayRequest} from "../handler/user/pay";
+import {NotFoundError} from "../handler/error/error";
 import {createPayTransaction, TransactionInfo} from "../service/transaction/transaction";
 
 @Route("/user")
@@ -72,4 +71,10 @@ export interface SignupRequest {
 export interface SigninRequest {
     username: string
     password: string
+}
+
+export interface PayRequest {
+    sender: number,
+    receiver: number,
+    amount: number,
 }
