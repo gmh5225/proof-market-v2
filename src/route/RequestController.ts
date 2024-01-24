@@ -3,7 +3,6 @@ import {findById, insert, RequestEntity, RequestStatus} from "../repository/requ
 import {BadRequestError} from "../handler/error/error";
 import {dbClient} from "../db/client";
 import {Query} from "@tsoa/runtime/dist/decorators/parameter";
-import {CreateRequestRequest} from "../handler/request/request";
 import {decodeAuthToken} from "../service/user/hash";
 
 @Route("/request")
@@ -115,4 +114,12 @@ export interface RequestItem {
     proof_key: number | null,
     input: any,
     aggregated_mode_id: number | null,
+}
+
+export interface CreateRequestRequest {
+    statement_key: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    input: any,
+    cost: number,
+    aggregatedModeId: number | undefined,
 }

@@ -1,9 +1,11 @@
 import {Body, Controller, Get, Header, Post, Route} from "tsoa";
-import {RegisterProducerRequest} from "../handler/producer/register";
 import {decodeAuthToken, decodeJwt} from "../service/user/hash";
 import {registerOrUpdate} from "../service/producer/producer";
 import {dbClient} from "../db/client";
 import {StatementEntity} from "../repository/statement";
+import {findById} from "../repository/user";
+import {BadRequestError} from "../handler/error/error";
+import {findByUserId, remove} from "../repository/producer";
 
 @Route("/producer")
 export class ProducerController extends Controller {
@@ -24,6 +26,23 @@ export class ProducerController extends Controller {
         }
     }
 
+    @Post("/deregister")
+    public async deregister(
+        @Header("authorization") jwt: string | undefined
+    ): Promise<boolean> {
+        const userInfo = decodeAuthToken(jwt)
+        const user = await findById(userInfo.id)
+        if (!user) {
+            throw new BadRequestError('User not found')
+        }
+        const producer = await findByUserId(userInfo.id)
+        if (!producer) {
+            return false
+        }
+        await remove(producer!.id!)
+        return true
+    }
+
     @Get("/last")
     public async last(): Promise<LastStatementInfo[]>  {
         // TODO: unclear business logic, from v1
@@ -36,6 +55,13 @@ export class ProducerController extends Controller {
             }
         })
     }
+}
+
+export interface RegisterProducerRequest {
+    name: string,
+    description: string,
+    url: string,
+    ethAddress: string,
 }
 
 export interface RegisterProducerResponse {

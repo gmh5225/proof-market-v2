@@ -1,9 +1,9 @@
 import {dbClient} from "../../db/client";
 import {findById as findRequestById, RequestEntity, RequestStatus} from "../../repository/request";
-import {CreateProposalRequest, ProposalFilter, ProposalItem} from "../../handler/proposal/proposal";
 import {insert, ProposalEntity, ProposalStatus} from "../../repository/proposal";
 import {BadRequestError} from "../../handler/error/error";
 import {useProposals} from "../../config/props";
+import {CreateProposalRequest, ProposalFilter, ProposalItem} from "../../route/ProposalController";
 
 export async function getProposals(
     userId: number,

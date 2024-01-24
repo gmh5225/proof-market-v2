@@ -1,7 +1,7 @@
-import {RegisterProducerRequest} from '../../handler/producer/register'
 import {findByUserId, insert, ProducerEntity, remove, update} from '../../repository/producer'
 import {findById, update as userUpdate} from '../../repository/user'
 import {BadRequestError} from '../../handler/error/error'
+import {RegisterProducerRequest} from "../../route/ProducerController";
 
 export async function registerOrUpdate(request: RegisterProducerRequest, userId: number): Promise<ProducerEntity> {
 	const user = await findById(userId)

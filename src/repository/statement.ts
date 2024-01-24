@@ -24,7 +24,7 @@ export interface StatementEntity {
     private: boolean,
     sender_id: number,
     monitoring: boolean,
-    completed: boolean,
+    completed: number,
     avg_generation_time: number,
     avg_cost: number,
 }

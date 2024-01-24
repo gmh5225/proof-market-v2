@@ -1,5 +1,4 @@
 import {Body, Controller, Delete, Get, Header, Path, Post, Route} from "tsoa";
-import {CreateProposalRequest, ProposalFilter, ProposalItem} from "../handler/proposal/proposal";
 import {decodeAuthToken} from "../service/user/hash";
 import {createProposal, getProposals, deleteProposal} from "../service/proposal/proposal";
 import {Query} from "@tsoa/runtime/dist/decorators/parameter";
@@ -55,4 +54,22 @@ export class ProposalController extends Controller {
         const userInfo = decodeAuthToken(jwt);
         await deleteProposal(id, userInfo.id)
     }
+}
+
+export interface ProposalFilter {
+    id: number | undefined,
+    status: RequestStatus | undefined,
+}
+
+export interface ProposalItem {
+    statement_key: string,
+    request_key: string,
+    _key: string,
+}
+
+export interface CreateProposalRequest {
+    request_id: string,
+    cost: number,
+    aggregated_mode_id: number | undefined,
+    wait_period_in_seconds: number,
 }

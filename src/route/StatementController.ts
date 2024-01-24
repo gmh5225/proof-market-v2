@@ -3,12 +3,13 @@ import {dbClient} from "../db/client";
 import {insert, StatementEntity} from "../repository/statement";
 import {NotFoundError} from "../handler/error/error";
 import {decodeAuthToken} from "../service/user/hash";
-import {CreateStatementRequest} from "../handler/statement/statement";
+import {Query} from "@tsoa/runtime/dist/decorators/parameter";
+import {statementBookInfo} from "../service/book/book";
 
 @Route("/statement")
 export class StatementController extends Controller {
 
-    @Get("/:id")
+    @Get('/:id')
     public async getById(
         @Path("id") id: string,
         @Header("authorization") jwt: string | undefined
@@ -33,10 +34,14 @@ export class StatementController extends Controller {
 
     @Get()
     public async getByFilter(
+        @Query("limit") limit: number = 10,
+        @Query("offset") offset: number = 0,
         @Header("authorization") jwt: string | undefined
     ): Promise<StatementItem[]> {
         const statements = await dbClient<StatementEntity>('statement')
             .where('isPrivate', false)
+            .limit(limit)
+            .offset(offset)
         return statements.map(e => {
             return {
                 id: e.id!,
@@ -51,6 +56,40 @@ export class StatementController extends Controller {
         })
     }
 
+    @Get('/info')
+    public async getInfoByFilter(
+        // TODO: queries not used now
+        @Query("limit") limit: number = 10,
+        @Query("offset") offset: number = 0,
+        @Header("authorization") jwt: string | undefined
+    ): Promise<StatementInfoItem[]> {
+        const statements = await dbClient<StatementEntity>('statement')
+        const results = statements.map(async e => {
+            return await statementBookInfo(e)
+        })
+        return Promise.all(results)
+    }
+
+    @Get('/statistics')
+    public async getStatisticsByFilter(
+        // TODO: queries not used now
+        @Query("limit") limit: number = 10,
+        @Query("offset") offset: number = 0,
+        @Header("authorization") jwt: string | undefined
+    ): Promise<StatementStatisticsItem[]> {
+        const statements = await dbClient<StatementEntity>('statement')
+        return statements.map(e => {
+            return {
+                id: e.id!,
+                name: e.name!,
+                description: e.description!,
+                avgCost: e.avg_cost,
+                avgGenerationTime: e.avg_generation_time,
+                completed: e.completed,
+            }
+        })
+    }
+
     @Post()
     public async createStatement(
         @Header("authorization") jwt: string | undefined,
@@ -60,7 +99,7 @@ export class StatementController extends Controller {
         const entity: StatementEntity = {
             avg_cost: 0,
             avg_generation_time: 0,
-            completed: false,
+            completed: 0,
             created_at: new Date(),
             definition: request.definition,
             description: request.description,
@@ -97,4 +136,40 @@ export interface StatementItem {
     type: string,
     isPrivate: boolean,
     definition: any,
+}
+
+export interface CreateStatementRequest {
+    name: string,
+    description: string,
+    url: string,
+    input_description: string,
+    type: string,
+    isPrivate: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    definition: any,
+}
+
+export interface StatementInfoItem {
+    id: number,
+    name: string,
+    description: string,
+    open: number,
+    close: number,
+    current: number,
+    min: number,
+    max: number,
+    dailyChange: number,
+    avgCost: number,
+    avgGenerationTime: number,
+    volume: number,
+}
+
+export interface StatementStatisticsItem {
+    id: number,
+    name: string,
+    description: string,
+    avgCost: number,
+    avgGenerationTime: number,
+    // number of completed requests
+    completed: number,
 }

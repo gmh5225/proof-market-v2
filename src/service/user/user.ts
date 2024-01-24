@@ -1,10 +1,9 @@
-import {SignupRequest} from '../../handler/user/sinup'
-import {SigninRequest} from '../../handler/user/signin'
 import jwt from 'jsonwebtoken'
 import {jwtSecret} from '../../config/props'
 import {checkPassword, hashPassword} from './hash'
 import {BadRequestError, UnauthorizedError} from '../../handler/error/error'
 import {findById, findByLogin, insert, UserEntity} from '../../repository/user'
+import {SignupRequest} from "../../route/UserController";
 
 export async function createUser(user: SignupRequest): Promise<UserEntity> {
 	const newUser: UserEntity = {
@@ -60,4 +59,9 @@ export interface UserDetails {
     balance: number,
     producer: boolean,
     createdAt: Date,
+}
+
+export interface SigninRequest {
+	username: string
+	password: string
 }

@@ -59,7 +59,7 @@ export async function up(knex: Knex): Promise<void> {
 			table.boolean('private').notNullable()
 			table.integer('sender_id').notNullable()
 			table.boolean('monitoring').notNullable()
-			table.boolean('completed').notNullable()
+			table.integer('completed').notNullable()
 			table.float('avg_generation_time').notNullable()
 			table.float('avg_cost')
 
