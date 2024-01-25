@@ -5,6 +5,8 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UserController } from './../route/UserController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { BookController } from './../route/BookController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { StatementController } from './../route/StatementController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { RequestController } from './../route/RequestController';
@@ -91,6 +93,26 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StatementBookItem": {
+        "dataType": "refObject",
+        "properties": {
+            "cost": {"dataType":"double","required":true},
+            "evalTime": {"dataType":"double","required":true},
+            "ordersAmount": {"dataType":"double","required":true},
+            "userOrdersAmount": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StatementBook": {
+        "dataType": "refObject",
+        "properties": {
+            "proposals": {"dataType":"array","array":{"dataType":"refObject","ref":"StatementBookItem"},"required":true},
+            "requests": {"dataType":"array","array":{"dataType":"refObject","ref":"StatementBookItem"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "StatementItem": {
         "dataType": "refObject",
         "properties": {
@@ -102,6 +124,79 @@ const models: TsoaRoute.Models = {
             "type": {"dataType":"string","required":true},
             "isPrivate": {"dataType":"boolean","required":true},
             "definition": {"dataType":"any","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StatementInfoItem": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "name": {"dataType":"string","required":true},
+            "description": {"dataType":"string","required":true},
+            "open": {"dataType":"double","required":true},
+            "close": {"dataType":"double","required":true},
+            "current": {"dataType":"double","required":true},
+            "min": {"dataType":"double","required":true},
+            "max": {"dataType":"double","required":true},
+            "dailyChange": {"dataType":"double","required":true},
+            "avgCost": {"dataType":"double","required":true},
+            "avgGenerationTime": {"dataType":"double","required":true},
+            "volume": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StatementStatisticsItem": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "name": {"dataType":"string","required":true},
+            "description": {"dataType":"string","required":true},
+            "avgCost": {"dataType":"double","required":true},
+            "avgGenerationTime": {"dataType":"double","required":true},
+            "completed": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StatementProposedItem": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "name": {"dataType":"string","required":true},
+            "statementId": {"dataType":"double","required":true},
+            "amount": {"dataType":"double","required":true},
+            "fees": {"dataType":"double","required":true},
+            "avgGenerationTime": {"dataType":"double","required":true},
+            "avgCost": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StatementRequestedItem": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "name": {"dataType":"string","required":true},
+            "senderId": {"dataType":"double","required":true},
+            "amount": {"dataType":"double","required":true},
+            "fees": {"dataType":"double","required":true},
+            "avgGenerationTime": {"dataType":"double","required":true},
+            "avgCost": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StatementOwnedItem": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "name": {"dataType":"string","required":true},
+            "amount": {"dataType":"double","required":true},
+            "fees": {"dataType":"double","required":true},
+            "avgGenerationTime": {"dataType":"double","required":true},
+            "avgCost": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -140,7 +235,7 @@ const models: TsoaRoute.Models = {
             "statement_key": {"dataType":"double","required":true},
             "input": {"dataType":"any","required":true},
             "cost": {"dataType":"double","required":true},
-            "aggregated_mode_id": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}],"required":true},
+            "aggregatedModeId": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}],"required":true},
         },
         "additionalProperties": false,
     },
@@ -180,6 +275,23 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ProofOwnedItem": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "proof": {"dataType":"string","required":true},
+            "requestId": {"dataType":"double","required":true},
+            "producerId": {"dataType":"double","required":true},
+            "generationTime": {"dataType":"double","required":true},
+            "input": {"dataType":"string","required":true},
+            "statementId": {"dataType":"double","required":true},
+            "statementName": {"dataType":"string","required":true},
+            "description": {"dataType":"string","required":true},
+            "statementDescription": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "SubmitProofRequest": {
         "dataType": "refObject",
         "properties": {
@@ -209,6 +321,15 @@ const models: TsoaRoute.Models = {
             "description": {"dataType":"string","required":true},
             "url": {"dataType":"string","required":true},
             "ethAddress": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "LastStatementInfo": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "senderId": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -374,6 +495,34 @@ export function RegisterRoutes(router: KoaRouter) {
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.get('/book/:statementId',
+            ...(fetchMiddlewares<Middleware>(BookController)),
+            ...(fetchMiddlewares<Middleware>(BookController.prototype.statementBook)),
+
+            async function BookController_statementBook(context: any, next: any) {
+            const args = {
+                    dc: {"in":"query","name":"dc","required":true,"dataType":"double"},
+                    dt: {"in":"query","name":"dt","required":true,"dataType":"double"},
+                    statementId: {"in":"path","name":"statementId","required":true,"dataType":"double"},
+                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new BookController();
+
+            const promise = controller.statementBook.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         router.get('/statement/:id',
             ...(fetchMiddlewares<Middleware>(StatementController)),
             ...(fetchMiddlewares<Middleware>(StatementController.prototype.getById)),
@@ -406,6 +555,8 @@ export function RegisterRoutes(router: KoaRouter) {
 
             async function StatementController_getByFilter(context: any, next: any) {
             const args = {
+                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                    offset: {"default":0,"in":"query","name":"offset","dataType":"double"},
                     jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
             };
 
@@ -422,6 +573,134 @@ export function RegisterRoutes(router: KoaRouter) {
             const controller = new StatementController();
 
             const promise = controller.getByFilter.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.get('/statement/info',
+            ...(fetchMiddlewares<Middleware>(StatementController)),
+            ...(fetchMiddlewares<Middleware>(StatementController.prototype.getInfoByFilter)),
+
+            async function StatementController_getInfoByFilter(context: any, next: any) {
+            const args = {
+                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                    offset: {"default":0,"in":"query","name":"offset","dataType":"double"},
+                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new StatementController();
+
+            const promise = controller.getInfoByFilter.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.get('/statement/statistics',
+            ...(fetchMiddlewares<Middleware>(StatementController)),
+            ...(fetchMiddlewares<Middleware>(StatementController.prototype.getStatisticsByFilter)),
+
+            async function StatementController_getStatisticsByFilter(context: any, next: any) {
+            const args = {
+                    offset: {"default":0,"in":"query","name":"offset","dataType":"double"},
+                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new StatementController();
+
+            const promise = controller.getStatisticsByFilter.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.get('/statement/proposed',
+            ...(fetchMiddlewares<Middleware>(StatementController)),
+            ...(fetchMiddlewares<Middleware>(StatementController.prototype.getProposedStatements)),
+
+            async function StatementController_getProposedStatements(context: any, next: any) {
+            const args = {
+                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new StatementController();
+
+            const promise = controller.getProposedStatements.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.get('/statement/requested',
+            ...(fetchMiddlewares<Middleware>(StatementController)),
+            ...(fetchMiddlewares<Middleware>(StatementController.prototype.getRequestedStatements)),
+
+            async function StatementController_getRequestedStatements(context: any, next: any) {
+            const args = {
+                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new StatementController();
+
+            const promise = controller.getRequestedStatements.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.get('/statement/owner',
+            ...(fetchMiddlewares<Middleware>(StatementController)),
+            ...(fetchMiddlewares<Middleware>(StatementController.prototype.getOwnerStatements)),
+
+            async function StatementController_getOwnerStatements(context: any, next: any) {
+            const args = {
+                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new StatementController();
+
+            const promise = controller.getOwnerStatements.apply(controller, validatedArgs as any);
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -484,6 +763,8 @@ export function RegisterRoutes(router: KoaRouter) {
             const args = {
                     costFrom: {"in":"query","name":"costFrom","required":true,"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}]},
                     createdAtFrom: {"in":"query","name":"createdAtFrom","required":true,"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"undefined"}]},
+                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                    offset: {"default":0,"in":"query","name":"offset","dataType":"double"},
             };
 
             let validatedArgs: any[] = [];
@@ -528,6 +809,32 @@ export function RegisterRoutes(router: KoaRouter) {
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.delete('/request/:id',
+            ...(fetchMiddlewares<Middleware>(RequestController)),
+            ...(fetchMiddlewares<Middleware>(RequestController.prototype.deleteRequest)),
+
+            async function RequestController_deleteRequest(context: any, next: any) {
+            const args = {
+                    id: {"in":"path","name":"id","required":true,"dataType":"double"},
+                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new RequestController();
+
+            const promise = controller.deleteRequest.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         router.get('/proposal/:id',
             ...(fetchMiddlewares<Middleware>(ProposalController)),
             ...(fetchMiddlewares<Middleware>(ProposalController.prototype.getById)),
@@ -561,6 +868,8 @@ export function RegisterRoutes(router: KoaRouter) {
             async function ProposalController_getByFilter(context: any, next: any) {
             const args = {
                     status: {"in":"query","name":"status","required":true,"ref":"RequestStatus"},
+                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                    offset: {"default":0,"in":"query","name":"offset","dataType":"double"},
                     jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
             };
 
@@ -606,6 +915,32 @@ export function RegisterRoutes(router: KoaRouter) {
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.delete('/proposal/:id',
+            ...(fetchMiddlewares<Middleware>(ProposalController)),
+            ...(fetchMiddlewares<Middleware>(ProposalController.prototype.deleteProposal)),
+
+            async function ProposalController_deleteProposal(context: any, next: any) {
+            const args = {
+                    id: {"in":"path","name":"id","required":true,"dataType":"double"},
+                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new ProposalController();
+
+            const promise = controller.deleteProposal.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         router.get('/proof/:id',
             ...(fetchMiddlewares<Middleware>(ProofController)),
             ...(fetchMiddlewares<Middleware>(ProofController.prototype.getById)),
@@ -628,6 +963,33 @@ export function RegisterRoutes(router: KoaRouter) {
             const controller = new ProofController();
 
             const promise = controller.getById.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.get('/proof/owned',
+            ...(fetchMiddlewares<Middleware>(ProofController)),
+            ...(fetchMiddlewares<Middleware>(ProofController.prototype.getOwnedProofs)),
+
+            async function ProofController_getOwnedProofs(context: any, next: any) {
+            const args = {
+                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                    offset: {"default":0,"in":"query","name":"offset","dataType":"double"},
+                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new ProofController();
+
+            const promise = controller.getOwnedProofs.apply(controller, validatedArgs as any);
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -657,7 +1019,7 @@ export function RegisterRoutes(router: KoaRouter) {
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        router.post('/user/register',
+        router.post('/producer/register',
             ...(fetchMiddlewares<Middleware>(ProducerController)),
             ...(fetchMiddlewares<Middleware>(ProducerController.prototype.register)),
 
@@ -680,6 +1042,55 @@ export function RegisterRoutes(router: KoaRouter) {
             const controller = new ProducerController();
 
             const promise = controller.register.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.post('/producer/deregister',
+            ...(fetchMiddlewares<Middleware>(ProducerController)),
+            ...(fetchMiddlewares<Middleware>(ProducerController.prototype.deregister)),
+
+            async function ProducerController_deregister(context: any, next: any) {
+            const args = {
+                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new ProducerController();
+
+            const promise = controller.deregister.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.get('/producer/last',
+            ...(fetchMiddlewares<Middleware>(ProducerController)),
+            ...(fetchMiddlewares<Middleware>(ProducerController.prototype.last)),
+
+            async function ProducerController_last(context: any, next: any) {
+            const args = {
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new ProducerController();
+
+            const promise = controller.last.apply(controller, validatedArgs as any);
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

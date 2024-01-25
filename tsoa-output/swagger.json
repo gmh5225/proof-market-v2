@@ -164,6 +164,56 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"StatementBookItem": {
+				"properties": {
+					"cost": {
+						"type": "number",
+						"format": "double"
+					},
+					"evalTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"ordersAmount": {
+						"type": "number",
+						"format": "double"
+					},
+					"userOrdersAmount": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"cost",
+					"evalTime",
+					"ordersAmount",
+					"userOrdersAmount"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StatementBook": {
+				"properties": {
+					"proposals": {
+						"items": {
+							"$ref": "#/components/schemas/StatementBookItem"
+						},
+						"type": "array"
+					},
+					"requests": {
+						"items": {
+							"$ref": "#/components/schemas/StatementBookItem"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"proposals",
+					"requests"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"StatementItem": {
 				"properties": {
 					"id": {
@@ -199,6 +249,229 @@
 					"type",
 					"isPrivate",
 					"definition"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StatementInfoItem": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"open": {
+						"type": "number",
+						"format": "double"
+					},
+					"close": {
+						"type": "number",
+						"format": "double"
+					},
+					"current": {
+						"type": "number",
+						"format": "double"
+					},
+					"min": {
+						"type": "number",
+						"format": "double"
+					},
+					"max": {
+						"type": "number",
+						"format": "double"
+					},
+					"dailyChange": {
+						"type": "number",
+						"format": "double"
+					},
+					"avgCost": {
+						"type": "number",
+						"format": "double"
+					},
+					"avgGenerationTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"volume": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"open",
+					"close",
+					"current",
+					"min",
+					"max",
+					"dailyChange",
+					"avgCost",
+					"avgGenerationTime",
+					"volume"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StatementStatisticsItem": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"avgCost": {
+						"type": "number",
+						"format": "double"
+					},
+					"avgGenerationTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"completed": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description",
+					"avgCost",
+					"avgGenerationTime",
+					"completed"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StatementProposedItem": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"statementId": {
+						"type": "number",
+						"format": "double"
+					},
+					"amount": {
+						"type": "number",
+						"format": "double"
+					},
+					"fees": {
+						"type": "number",
+						"format": "double"
+					},
+					"avgGenerationTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"avgCost": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"statementId",
+					"amount",
+					"fees",
+					"avgGenerationTime",
+					"avgCost"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StatementRequestedItem": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"senderId": {
+						"type": "number",
+						"format": "double"
+					},
+					"amount": {
+						"type": "number",
+						"format": "double"
+					},
+					"fees": {
+						"type": "number",
+						"format": "double"
+					},
+					"avgGenerationTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"avgCost": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"senderId",
+					"amount",
+					"fees",
+					"avgGenerationTime",
+					"avgCost"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StatementOwnedItem": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"amount": {
+						"type": "number",
+						"format": "double"
+					},
+					"fees": {
+						"type": "number",
+						"format": "double"
+					},
+					"avgGenerationTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"avgCost": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"amount",
+					"fees",
+					"avgGenerationTime",
+					"avgCost"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -289,7 +562,7 @@
 						"type": "number",
 						"format": "double"
 					},
-					"aggregated_mode_id": {
+					"aggregatedModeId": {
 						"type": "number",
 						"format": "double"
 					}
@@ -373,6 +646,59 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ProofOwnedItem": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"proof": {
+						"type": "string"
+					},
+					"requestId": {
+						"type": "number",
+						"format": "double"
+					},
+					"producerId": {
+						"type": "number",
+						"format": "double"
+					},
+					"generationTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"input": {
+						"type": "string"
+					},
+					"statementId": {
+						"type": "number",
+						"format": "double"
+					},
+					"statementName": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"statementDescription": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"proof",
+					"requestId",
+					"producerId",
+					"generationTime",
+					"input",
+					"statementId",
+					"statementName",
+					"description",
+					"statementDescription"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"SubmitProofRequest": {
 				"properties": {
 					"proof": {},
@@ -442,6 +768,24 @@
 					"description",
 					"url",
 					"ethAddress"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LastStatementInfo": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"senderId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"senderId"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -631,6 +975,61 @@
 				}
 			}
 		},
+		"/book/{statementId}": {
+			"get": {
+				"operationId": "StatementBook",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StatementBook"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "dc",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "dt",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "path",
+						"name": "statementId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/statement/{id}": {
 			"get": {
 				"operationId": "GetById",
@@ -688,6 +1087,26 @@
 				"security": [],
 				"parameters": [
 					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
 						"in": "header",
 						"name": "authorization",
 						"required": true,
@@ -734,6 +1153,191 @@
 				}
 			}
 		},
+		"/statement/info": {
+			"get": {
+				"operationId": "GetInfoByFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/StatementInfoItem"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/statement/statistics": {
+			"get": {
+				"operationId": "GetStatisticsByFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/StatementStatisticsItem"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/statement/proposed": {
+			"get": {
+				"operationId": "GetProposedStatements",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/StatementProposedItem"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/statement/requested": {
+			"get": {
+				"operationId": "GetRequestedStatements",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/StatementRequestedItem"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/statement/owner": {
+			"get": {
+				"operationId": "GetOwnerStatements",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/StatementOwnedItem"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/request/{id}": {
 			"get": {
 				"operationId": "GetById",
@@ -758,6 +1362,34 @@
 						"schema": {
 							"format": "double",
 							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteRequest",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]
@@ -799,6 +1431,26 @@
 						"schema": {
 							"format": "date-time",
 							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
 						}
 					}
 				]
@@ -875,6 +1527,34 @@
 						}
 					}
 				]
+			},
+			"delete": {
+				"operationId": "DeleteProposal",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/proposal": {
@@ -903,6 +1583,26 @@
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/RequestStatus"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
 						}
 					},
 					{
@@ -981,6 +1681,57 @@
 				]
 			}
 		},
+		"/proof/owned": {
+			"get": {
+				"operationId": "GetOwnedProofs",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ProofOwnedItem"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/proof": {
 			"post": {
 				"operationId": "SubmitProof",
@@ -1019,7 +1770,7 @@
 				}
 			}
 		},
-		"/user/register": {
+		"/producer/register": {
 			"post": {
 				"operationId": "Register",
 				"responses": {
@@ -1055,6 +1806,56 @@
 						}
 					}
 				}
+			}
+		},
+		"/producer/deregister": {
+			"post": {
+				"operationId": "Deregister",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/producer/last": {
+			"get": {
+				"operationId": "Last",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/LastStatementInfo"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
 			}
 		}
 	},

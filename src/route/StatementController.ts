@@ -72,8 +72,6 @@ export class StatementController extends Controller {
 
     @Get('/statistics')
     public async getStatisticsByFilter(
-        // TODO: queries not used now
-        @Query("limit") limit: number = 10,
         @Query("offset") offset: number = 0,
         @Header("authorization") jwt: string | undefined
     ): Promise<StatementStatisticsItem[]> {
@@ -86,6 +84,103 @@ export class StatementController extends Controller {
                 avgCost: e.avg_cost,
                 avgGenerationTime: e.avg_generation_time,
                 completed: e.completed,
+            }
+        })
+    }
+
+    @Get('/proposed')
+    public async getProposedStatements(
+        @Header("authorization") jwt: string | undefined
+    ): Promise<StatementProposedItem[]> {
+        const userInfo = decodeAuthToken(jwt)
+        const result = await dbClient('proposal as p')
+            .select(
+                's.id AS id',
+                'p.statement_id AS statement_id',
+                's.name AS name',
+                dbClient.raw('COUNT(*) AS amount'),
+                dbClient.raw('SUM(p.cost) AS fees'),
+                dbClient.raw('AVG(p.generation_time) AS avg_generation_time'),
+                dbClient.raw('AVG(p.cost) AS avg_cost'),
+            )
+            .join('statement as s', 'p.statement_id', 's.id')
+            .where({
+                'p.sender_id': userInfo.id,
+                'p.status': 'DONE'
+            })
+            .groupBy('p.statement_id', 's.name', 's.id')
+            .orderBy([
+                {column: 's.name', order: 'asc'},
+                {column: 'amount', order: 'desc'}
+            ]);
+        return result.map(e => {
+            return {
+                id: e.id,
+                name: e.name,
+                statementId: e.statement_id,
+                amount: e.amount,
+                fees: e.fees,
+                avgGenerationTime: e.avg_generation_time,
+                avgCost: e.avg_cost,
+            }
+        })
+    }
+
+    @Get('/requested')
+    public async getRequestedStatements(
+        @Header("authorization") jwt: string | undefined
+    ): Promise<StatementRequestedItem[]> {
+        const userInfo = decodeAuthToken(jwt)
+        const result = await dbClient('request as r')
+            .select(
+                's.id AS id',
+                's.name AS name',
+                's.sender AS sender',
+                dbClient.raw('COUNT(*) AS amount'),
+                dbClient.raw('SUM(r.cost) AS fees'),
+                dbClient.raw('AVG(r.generation_time) AS avg_generation_time'),
+                dbClient.raw('AVG(r.cost) AS avg_cost')
+            )
+            .join('statement as s', 'r.statement_id', 's.id')
+            .where('r.sender_id', userInfo.id)
+            .groupBy('s.name', 's.id', 's.sender_id')
+            .orderBy('s.name', 'asc');
+        return result.map(e => {
+            return {
+                id: e.id,
+                name: e.name,
+                senderId: e.sender_id,
+                amount: e.amount,
+                fees: e.fees,
+                avgGenerationTime: e.avg_generation_time,
+                avgCost: e.avg_cost,
+            }
+        })
+    }
+
+    @Get('/owner')
+    public async getOwnerStatements(
+        @Header("authorization") jwt: string | undefined
+    ): Promise<StatementOwnedItem[]> {
+        const userInfo = decodeAuthToken(jwt)
+        const result = await dbClient('statement as s')
+            .select(
+                's.id AS id',
+                's.name AS name',
+                's.completed AS amount',
+                's.fees AS fees',
+                's.avg_generation_time AS avg_generation_time',
+                's.avg_cost AS avg_cost'
+            )
+            .where('s.sender_id', userInfo.id)
+        return result.map(e => {
+            return {
+                id: e.id,
+                name: e.name,
+                amount: e.amount,
+                fees: e.fees,
+                avgGenerationTime: e.avg_generation_time,
+                avgCost: e.avg_cost,
             }
         })
     }
@@ -172,4 +267,33 @@ export interface StatementStatisticsItem {
     avgGenerationTime: number,
     // number of completed requests
     completed: number,
+}
+
+export interface StatementProposedItem {
+    id: number,
+    name: string,
+    statementId: number,
+    amount: number,
+    fees: number,
+    avgGenerationTime: number,
+    avgCost: number,
+}
+
+export interface StatementRequestedItem {
+    id: number,
+    name: string,
+    senderId: number,
+    amount: number,
+    fees: number,
+    avgGenerationTime: number,
+    avgCost: number,
+}
+
+export interface StatementOwnedItem {
+    id: number,
+    name: string,
+    amount: number,
+    fees: number,
+    avgGenerationTime: number,
+    avgCost: number,
 }
