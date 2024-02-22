@@ -1,65 +1,38 @@
-import {Body, Controller, Get, Header, Path, Post, Route} from "tsoa";
-import {AuthUser, createUser, login, userDetails, UserDetails} from "../service/user/user";
-import {userBalanceInfo, UserBalanceInfo} from "../service/user/balance";
+import {Body, Controller, Get, Header, Post, Route} from "tsoa";
+import {authUser, AuthUser, userDetails, UserDetails} from "../service/user/user";
 import {decodeAuthToken} from "../service/user/hash";
-import {existsByLogin} from "../repository/user";
-import {NotFoundError} from "../handler/error/error";
-import {createPayTransaction, TransactionInfo} from "../service/transaction/transaction";
+import * as crypto from "crypto";
+import {hashMessage, recoverAddress} from "ethers";
 
 @Route("/user")
 export class UserController extends Controller {
 
-    @Post("/signup")
-    public async signup(
-        @Body() request: SignupRequest,
-    ): Promise<AuthUser> {
-        const userEntity = await createUser(request);
-        return  await login({
-            username: userEntity.login,
-            password: request.passwd,
-        })
-    }
-
-    @Post("/signin")
-    public async signin(
-        @Body() request: SigninRequest,
-    ): Promise<AuthUser> {
-        return await login(request)
-    }
-
-    @Get("/balance")
-    public async balance(
-        @Header("authorization") jwt: string | undefined,
-    ): Promise<UserBalanceInfo> {
-        return userBalanceInfo(decodeAuthToken(jwt).id)
-    }
-
-    @Get("/me")
-    public async me(
-        @Header("authorization") jwt: string | undefined,
-    ): Promise<UserDetails> {
-        return userDetails(decodeAuthToken(jwt).id)
-    }
-
-    @Get("/exists/:login")
-    public async exists(
-        @Path("login") login: string
-    ): Promise<void> {
-        const userInfo = await existsByLogin(login)
-        if (!userInfo) {
-            throw new NotFoundError("User not found")
+    @Get("/metamask/message")
+    public async metamaskAuthMessage(): Promise<MetamaskAuthMessage> {
+        const nonce = crypto.randomBytes(16).toString('hex')
+        const expiration = new Date(new Date().getTime() + (60*60*1000))
+        const msg = `proof_market_${nonce}_${expiration}`
+        return {
+            msg: msg,
+            expiration: expiration,
         }
     }
 
-    @Post("/pay")
-    public async pay(
-        @Body() request: PayRequest,
-        @Header("authorization") jwt: string | undefined,
-    ): Promise<TransactionInfo> {
-        const userInfo = decodeAuthToken(jwt)
-        return createPayTransaction(request, userInfo.id)
+    @Post("/metamask")
+    public async metamaskAuth(
+        @Body() request: MetamaskAuthRequest,
+    ): Promise<AuthUser> {
+        const hash = hashMessage(request.msg)
+        const address = recoverAddress(hash, request.signature);
+        return await authUser(address)
     }
 
+    @Get("/info")
+    public async me(
+        @Header("Authorization") jwt: string | undefined,
+    ): Promise<UserDetails> {
+        return userDetails(decodeAuthToken(jwt).id)
+    }
 }
 
 export interface SignupRequest {
@@ -77,4 +50,14 @@ export interface PayRequest {
     sender: number,
     receiver: number,
     amount: number,
+}
+
+export interface MetamaskAuthRequest {
+    msg: string,
+    signature: string,
+}
+
+export interface MetamaskAuthMessage {
+    msg: string,
+    expiration: Date,
 }

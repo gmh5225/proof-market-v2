@@ -4,3 +4,4 @@ export const jwtSecret = process.env.JWT_SECRET || 'jwtSecret'
 export const minTokensForProducer = parseInt(process.env.MIN_TOKENS_FOR_PRODUCER || '500')
 export const jaegerHost = process.env.JAEGER_HOST || 'http://localhost:14268/api/traces'
 export const useProposals = (process.env.USE_PROPOSALS || 'false') == 'true'
+export const blockchainNode = (process.env.BLOCKCHAIN_NODE || 'http://localhost:9999')

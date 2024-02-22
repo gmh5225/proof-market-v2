@@ -6,10 +6,7 @@ export async function up(knex: Knex): Promise<void> {
 		await knex.schema.createTable('user', function(table) {
 			table.increments('id').primary()
 			table.timestamp('created_at').notNullable()
-			table.timestamp('updated_at').notNullable()
-			table.text('login').unsigned().notNullable().unique()
-			table.text('email').unsigned().unique()
-			table.text('password').unsigned().notNullable()
+			table.text('address').notNullable()
 			table.bigint('balance').unsigned().notNullable().defaultTo(0)
 			table.boolean('producer').notNullable().defaultTo(false)
 		});

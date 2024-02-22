@@ -1,36 +1,37 @@
 import jwt from 'jsonwebtoken'
 import {jwtSecret} from '../../config/props'
-import {checkPassword, hashPassword} from './hash'
-import {BadRequestError, UnauthorizedError} from '../../handler/error/error'
-import {findById, findByLogin, insert, UserEntity} from '../../repository/user'
-import {SignupRequest} from "../../route/UserController";
+import {BadRequestError} from '../../handler/error/error'
+import {findByAddress, findById, insert, UserEntity} from '../../repository/user'
+import {balance} from "../blockchain/client";
 
-export async function createUser(user: SignupRequest): Promise<UserEntity> {
-	const newUser: UserEntity = {
-		id: undefined,
-		login: user.user,
-		password: await hashPassword(user.passwd),
-		created_at: new Date(),
-		updated_at: new Date(),
-		balance: BigInt(0),
-		producer: false,
-		email: null,
+export async function authUser(
+	address: string,
+): Promise<AuthUser> {
+	const userOpt = await findByAddress(address);
+	if (!userOpt) {
+		const saved = await insert({
+			id: undefined,
+			address: address,
+			created_at: new Date(),
+			producer: false,
+		})
+		console.log(`User created with address ${address}`)
+		return {
+			id: saved.id!,
+			jwt: jwt.sign(userPayload(saved), jwtSecret),
+		}
 	}
-	return await insert(newUser)
+	console.log(`User authorised with address ${address}`)
+	return {
+		id: userOpt.id!,
+		jwt: jwt.sign(userPayload(userOpt), jwtSecret),
+	}
 }
 
-export async function login(request: SigninRequest): Promise<AuthUser> {
-	const user = await findByLogin(request.username)
-	if (!user || !(await checkPassword(request.password, user.password))) {
-		throw new UnauthorizedError('Invalid credentials')
-	}
-	const payload = {
-		id: user.id,
-		login: user.login,
-	}
+function userPayload(user: UserEntity): UserPayload {
 	return {
 		id: user.id!,
-		jwt: jwt.sign(payload, jwtSecret),
+		address: user.address,
 	}
 }
 
@@ -41,8 +42,8 @@ export async function userDetails(userId: number): Promise<UserDetails> {
 	}
 	return {
 		id: user.id!,
-		login: user.login,
-		balance: Number(user.balance),
+		address: user.address,
+		balance: await balance(user.address),
 		producer: user.producer,
 		createdAt: user.created_at,
 	}
@@ -55,7 +56,7 @@ export interface AuthUser {
 
 export interface UserDetails {
     id: number,
-    login: string,
+    address: string,
     balance: number,
     producer: boolean,
     createdAt: Date,
@@ -64,4 +65,9 @@ export interface UserDetails {
 export interface SigninRequest {
 	username: string
 	password: string
+}
+
+interface UserPayload {
+	id: number,
+	address: string,
 }
