@@ -2,16 +2,19 @@ import {Body, Controller, Get, Header, Post, Route} from "tsoa";
 import {authUser, AuthUser, userDetails, UserDetails} from "../service/user/user";
 import {decodeAuthToken} from "../service/user/hash";
 import * as crypto from "crypto";
-import {hashMessage, recoverAddress} from "ethers";
+import {Query} from "@tsoa/runtime/dist/decorators/parameter";
+import {getAddress, verifyMessage} from "viem";
 
 @Route("/user")
 export class UserController extends Controller {
 
     @Get("/metamask/message")
-    public async metamaskAuthMessage(): Promise<MetamaskAuthMessage> {
+    public async metamaskAuthMessage(
+        @Query("address") address: string,
+    ): Promise<MetamaskAuthMessage> {
         const nonce = crypto.randomBytes(16).toString('hex')
         const expiration = new Date(new Date().getTime() + (60*60*1000))
-        const msg = `proof_market_${nonce}_${expiration}`
+        const msg = `proof_market_${address}_${nonce}_${expiration}`
         return {
             msg: msg,
             expiration: expiration,
@@ -22,8 +25,15 @@ export class UserController extends Controller {
     public async metamaskAuth(
         @Body() request: MetamaskAuthRequest,
     ): Promise<AuthUser> {
-        const hash = hashMessage(request.msg)
-        const address = recoverAddress(hash, request.signature);
+        const address = getAddress(request.addressRaw)
+        const isValid = await verifyMessage({
+            address: address,
+            message: request.msg,
+            signature: `0x${request.signRaw}`,
+        })
+        if (!isValid) {
+            throw new Error('Invalid signature')
+        }
         return await authUser(address)
     }
 
@@ -54,7 +64,8 @@ export interface PayRequest {
 
 export interface MetamaskAuthRequest {
     msg: string,
-    signature: string,
+    signRaw: string,
+    addressRaw: string,
 }
 
 export interface MetamaskAuthMessage {

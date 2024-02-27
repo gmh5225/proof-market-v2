@@ -39,6 +39,7 @@
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1",
     "tsoa": "^6.0.0",
+    "viem": "^2.7.15",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
