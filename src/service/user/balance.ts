@@ -1,6 +1,7 @@
 import {BadRequestError} from '../../handler/error/error'
 import {findById, update} from '../../repository/user'
 import {userBlockedTokensAmount} from '../request/request'
+import {getBalance, transfer} from "../blockchain/client";
 
 export async function userBalanceInfo(userId: number): Promise<UserBalanceInfo> {
 	const user = await findById(userId)
@@ -8,9 +9,10 @@ export async function userBalanceInfo(userId: number): Promise<UserBalanceInfo> 
 		throw new BadRequestError('User not found')
 	}
 	const blocked = await userBlockedTokensAmount(userId)
+	const balance = await getBalance(user.address)
 	return {
 		user: userId,
-		balance: Number(user.balance),
+		balance: balance,
 		blocked: blocked ?? 0,
 	}
 }
@@ -20,8 +22,7 @@ export async function changeBalance(value: number, userId: number) {
 	if (!user) {
 		throw new BadRequestError('User not found')
 	}
-	user.balance += BigInt(value)
-	await update(user)
+	// TODO: finish transfer
 }
 
 export interface UserBalanceInfo {

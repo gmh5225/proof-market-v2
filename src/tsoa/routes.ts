@@ -22,6 +22,15 @@ import type * as KoaRouter from '@koa/router';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "MetamaskAuthMessage": {
+        "dataType": "refObject",
+        "properties": {
+            "msg": {"dataType":"string","required":true},
+            "expiration": {"dataType":"datetime","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AuthUser": {
         "dataType": "refObject",
         "properties": {
@@ -31,31 +40,12 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "SignupRequest": {
+    "MetamaskAuthRequest": {
         "dataType": "refObject",
         "properties": {
-            "user": {"dataType":"string","required":true},
-            "passwd": {"dataType":"string","required":true},
-            "email": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "SigninRequest": {
-        "dataType": "refObject",
-        "properties": {
-            "username": {"dataType":"string","required":true},
-            "password": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserBalanceInfo": {
-        "dataType": "refObject",
-        "properties": {
-            "user": {"dataType":"double","required":true},
-            "balance": {"dataType":"double","required":true},
-            "blocked": {"dataType":"double","required":true},
+            "msg": {"dataType":"string","required":true},
+            "signRaw": {"dataType":"string","required":true},
+            "addressRaw": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -64,31 +54,10 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "id": {"dataType":"double","required":true},
-            "login": {"dataType":"string","required":true},
+            "address": {"dataType":"string","required":true},
             "balance": {"dataType":"double","required":true},
             "producer": {"dataType":"boolean","required":true},
             "createdAt": {"dataType":"datetime","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "TransactionInfo": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double","required":true},
-            "sender": {"dataType":"double","required":true},
-            "receiver": {"dataType":"double","required":true},
-            "amount": {"dataType":"double","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "PayRequest": {
-        "dataType": "refObject",
-        "properties": {
-            "sender": {"dataType":"double","required":true},
-            "receiver": {"dataType":"double","required":true},
-            "amount": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -344,13 +313,13 @@ export function RegisterRoutes(router: KoaRouter) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        router.post('/user/signup',
+        router.get('/user/metamask/message',
             ...(fetchMiddlewares<Middleware>(UserController)),
-            ...(fetchMiddlewares<Middleware>(UserController.prototype.signup)),
+            ...(fetchMiddlewares<Middleware>(UserController.prototype.metamaskAuthMessage)),
 
-            async function UserController_signup(context: any, next: any) {
+            async function UserController_metamaskAuthMessage(context: any, next: any) {
             const args = {
-                    request: {"in":"body","name":"request","required":true,"ref":"SignupRequest"},
+                    address: {"in":"query","name":"address","required":true,"dataType":"string"},
             };
 
             let validatedArgs: any[] = [];
@@ -365,17 +334,17 @@ export function RegisterRoutes(router: KoaRouter) {
 
             const controller = new UserController();
 
-            const promise = controller.signup.apply(controller, validatedArgs as any);
+            const promise = controller.metamaskAuthMessage.apply(controller, validatedArgs as any);
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        router.post('/user/signin',
+        router.post('/user/metamask',
             ...(fetchMiddlewares<Middleware>(UserController)),
-            ...(fetchMiddlewares<Middleware>(UserController.prototype.signin)),
+            ...(fetchMiddlewares<Middleware>(UserController.prototype.metamaskAuth)),
 
-            async function UserController_signin(context: any, next: any) {
+            async function UserController_metamaskAuth(context: any, next: any) {
             const args = {
-                    request: {"in":"body","name":"request","required":true,"ref":"SigninRequest"},
+                    request: {"in":"body","name":"request","required":true,"ref":"MetamaskAuthRequest"},
             };
 
             let validatedArgs: any[] = [];
@@ -390,42 +359,17 @@ export function RegisterRoutes(router: KoaRouter) {
 
             const controller = new UserController();
 
-            const promise = controller.signin.apply(controller, validatedArgs as any);
+            const promise = controller.metamaskAuth.apply(controller, validatedArgs as any);
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        router.get('/user/balance',
-            ...(fetchMiddlewares<Middleware>(UserController)),
-            ...(fetchMiddlewares<Middleware>(UserController.prototype.balance)),
-
-            async function UserController_balance(context: any, next: any) {
-            const args = {
-                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-              validatedArgs = getValidatedArgs(args, context, next);
-            } catch (err) {
-              const error = err as any;
-              error.message ||= JSON.stringify({ fields: error.fields });
-              context.status = error.status;
-              context.throw(context.status, error.message, error);
-            }
-
-            const controller = new UserController();
-
-            const promise = controller.balance.apply(controller, validatedArgs as any);
-            return promiseHandler(controller, promise, context, undefined, undefined);
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        router.get('/user/me',
+        router.get('/user/info',
             ...(fetchMiddlewares<Middleware>(UserController)),
             ...(fetchMiddlewares<Middleware>(UserController.prototype.me)),
 
             async function UserController_me(context: any, next: any) {
             const args = {
-                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+                    jwt: {"in":"header","name":"Authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
             };
 
             let validatedArgs: any[] = [];
@@ -441,57 +385,6 @@ export function RegisterRoutes(router: KoaRouter) {
             const controller = new UserController();
 
             const promise = controller.me.apply(controller, validatedArgs as any);
-            return promiseHandler(controller, promise, context, undefined, undefined);
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        router.get('/user/exists/:login',
-            ...(fetchMiddlewares<Middleware>(UserController)),
-            ...(fetchMiddlewares<Middleware>(UserController.prototype.exists)),
-
-            async function UserController_exists(context: any, next: any) {
-            const args = {
-                    login: {"in":"path","name":"login","required":true,"dataType":"string"},
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-              validatedArgs = getValidatedArgs(args, context, next);
-            } catch (err) {
-              const error = err as any;
-              error.message ||= JSON.stringify({ fields: error.fields });
-              context.status = error.status;
-              context.throw(context.status, error.message, error);
-            }
-
-            const controller = new UserController();
-
-            const promise = controller.exists.apply(controller, validatedArgs as any);
-            return promiseHandler(controller, promise, context, undefined, undefined);
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        router.post('/user/pay',
-            ...(fetchMiddlewares<Middleware>(UserController)),
-            ...(fetchMiddlewares<Middleware>(UserController.prototype.pay)),
-
-            async function UserController_pay(context: any, next: any) {
-            const args = {
-                    request: {"in":"body","name":"request","required":true,"ref":"PayRequest"},
-                    jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-              validatedArgs = getValidatedArgs(args, context, next);
-            } catch (err) {
-              const error = err as any;
-              error.message ||= JSON.stringify({ fields: error.fields });
-              context.status = error.status;
-              context.throw(context.status, error.message, error);
-            }
-
-            const controller = new UserController();
-
-            const promise = controller.pay.apply(controller, validatedArgs as any);
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

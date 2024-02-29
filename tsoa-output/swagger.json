@@ -7,6 +7,23 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"MetamaskAuthMessage": {
+				"properties": {
+					"msg": {
+						"type": "string"
+					},
+					"expiration": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"msg",
+					"expiration"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"AuthUser": {
 				"properties": {
 					"id": {
@@ -24,60 +41,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"SignupRequest": {
+			"MetamaskAuthRequest": {
 				"properties": {
-					"user": {
+					"msg": {
 						"type": "string"
 					},
-					"passwd": {
+					"signRaw": {
 						"type": "string"
 					},
-					"email": {
+					"addressRaw": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"user",
-					"passwd"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"SigninRequest": {
-				"properties": {
-					"username": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"username",
-					"password"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"UserBalanceInfo": {
-				"properties": {
-					"user": {
-						"type": "number",
-						"format": "double"
-					},
-					"balance": {
-						"type": "number",
-						"format": "double"
-					},
-					"blocked": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"user",
-					"balance",
-					"blocked"
+					"msg",
+					"signRaw",
+					"addressRaw"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -88,7 +67,7 @@
 						"type": "number",
 						"format": "double"
 					},
-					"login": {
+					"address": {
 						"type": "string"
 					},
 					"balance": {
@@ -105,61 +84,10 @@
 				},
 				"required": [
 					"id",
-					"login",
+					"address",
 					"balance",
 					"producer",
 					"createdAt"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"TransactionInfo": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"sender": {
-						"type": "number",
-						"format": "double"
-					},
-					"receiver": {
-						"type": "number",
-						"format": "double"
-					},
-					"amount": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"id",
-					"sender",
-					"receiver",
-					"amount"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"PayRequest": {
-				"properties": {
-					"sender": {
-						"type": "number",
-						"format": "double"
-					},
-					"receiver": {
-						"type": "number",
-						"format": "double"
-					},
-					"amount": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"sender",
-					"receiver",
-					"amount"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -802,74 +730,16 @@
 		"contact": {}
 	},
 	"paths": {
-		"/user/signup": {
-			"post": {
-				"operationId": "Signup",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/AuthUser"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/SignupRequest"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/user/signin": {
-			"post": {
-				"operationId": "Signin",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/AuthUser"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/SigninRequest"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/user/balance": {
+		"/user/metamask/message": {
 			"get": {
-				"operationId": "Balance",
+				"operationId": "MetamaskAuthMessage",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserBalanceInfo"
+									"$ref": "#/components/schemas/MetamaskAuthMessage"
 								}
 							}
 						}
@@ -878,8 +748,8 @@
 				"security": [],
 				"parameters": [
 					{
-						"in": "header",
-						"name": "authorization",
+						"in": "query",
+						"name": "address",
 						"required": true,
 						"schema": {
 							"type": "string"
@@ -888,7 +758,36 @@
 				]
 			}
 		},
-		"/user/me": {
+		"/user/metamask": {
+			"post": {
+				"operationId": "MetamaskAuth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthUser"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MetamaskAuthRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/info": {
 			"get": {
 				"operationId": "Me",
 				"responses": {
@@ -907,72 +806,13 @@
 				"parameters": [
 					{
 						"in": "header",
-						"name": "authorization",
+						"name": "Authorization",
 						"required": true,
 						"schema": {
 							"type": "string"
 						}
 					}
 				]
-			}
-		},
-		"/user/exists/{login}": {
-			"get": {
-				"operationId": "Exists",
-				"responses": {
-					"204": {
-						"description": "No content"
-					}
-				},
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "login",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/user/pay": {
-			"post": {
-				"operationId": "Pay",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/TransactionInfo"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [
-					{
-						"in": "header",
-						"name": "authorization",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PayRequest"
-							}
-						}
-					}
-				}
 			}
 		},
 		"/book/{statementId}": {

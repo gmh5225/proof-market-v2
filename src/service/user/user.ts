@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import {jwtSecret} from '../../config/props'
 import {BadRequestError} from '../../handler/error/error'
 import {findByAddress, findById, insert, UserEntity} from '../../repository/user'
-import {balance} from "../blockchain/client";
+import {getBalance} from "../blockchain/client";
 
 export async function authUser(
 	address: string,
@@ -43,7 +43,7 @@ export async function userDetails(userId: number): Promise<UserDetails> {
 	return {
 		id: user.id!,
 		address: user.address,
-		balance: await balance(user.address),
+		balance: await getBalance(user.address),
 		producer: user.producer,
 		createdAt: user.created_at,
 	}
