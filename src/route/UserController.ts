@@ -8,6 +8,7 @@ import {getAddress, verifyMessage} from "viem";
 @Route("/user")
 export class UserController extends Controller {
 
+    // DONE
     @Get("/metamask/message")
     public async metamaskAuthMessage(
         @Query("address") address: string,
@@ -21,6 +22,7 @@ export class UserController extends Controller {
         }
     }
 
+    // DONE
     @Post("/metamask")
     public async metamaskAuth(
         @Body() request: MetamaskAuthRequest,
@@ -37,23 +39,13 @@ export class UserController extends Controller {
         return await authUser(address)
     }
 
+    // DONE
     @Get("/info")
     public async me(
         @Header("Authorization") jwt: string | undefined,
     ): Promise<UserDetails> {
         return userDetails(decodeAuthToken(jwt).id)
     }
-}
-
-export interface SignupRequest {
-    user: string
-    passwd: string
-    email?: string
-}
-
-export interface SigninRequest {
-    username: string
-    password: string
 }
 
 export interface PayRequest {

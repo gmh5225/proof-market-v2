@@ -21,10 +21,5 @@ export interface StatementEntity {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     definition: any,
     type: string,
-    private: boolean,
     sender_id: number,
-    monitoring: boolean,
-    completed: number,
-    avg_generation_time: number,
-    avg_cost: number,
 }

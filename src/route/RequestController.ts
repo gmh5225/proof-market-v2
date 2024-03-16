@@ -8,6 +8,7 @@ import {decodeAuthToken} from "../service/user/hash";
 @Route("/request")
 export class RequestController extends Controller {
 
+    // DONE
     @Get("/:id")
     public async getById(
         @Path("id") id: number,
@@ -18,45 +19,59 @@ export class RequestController extends Controller {
         }
         return {
             id: entity.id!,
-            status: RequestStatus[entity.status],
-            statement_key: entity.statement_id,
+            status: entity.status,
+            statementId: entity.statement_id,
             cost: entity.cost,
-            proof_key: entity.proof_id,
+            proofId: entity.proof_id,
             input: entity.input,
-            aggregated_mode_id: entity.aggregated_mode_id,
+            aggregatedModeId: entity.aggregated_mode_id,
         }
     }
 
+    // DONE
     @Get()
     public async getByFilter(
         @Query("costFrom") costFrom: number | undefined,
         @Query("createdAtFrom") createdAtFrom: Date | undefined,
+        @Query('owned') owned: boolean = false,
+        @Query('statementId') statementId: number | undefined,
+        @Query('status') status: RequestStatus | undefined,
         @Query("limit") limit: number = 10,
         @Query("offset") offset: number = 0,
+        @Header("authorization") jwt: string | undefined
     ): Promise<RequestItem[]> {
         let queryBuilder = dbClient<RequestEntity>('request')
-            .where('status', RequestStatus[RequestStatus.NEW])
-            .where('assignedId', null);
         if (costFrom) {
             queryBuilder = queryBuilder.where('cost', '>=', costFrom!)
         }
         if (createdAtFrom) {
             queryBuilder = queryBuilder.where('createdAt', '>=', createdAtFrom)
         }
+        if (owned) {
+            const userInfo = decodeAuthToken(jwt)
+            queryBuilder = queryBuilder.where('sender_id', userInfo.id)
+        }
+        if (statementId) {
+            queryBuilder = queryBuilder.where('statement_id', statementId)
+        }
+        if (status) {
+            queryBuilder = queryBuilder.where('status', RequestStatus[status])
+        }
         return (await queryBuilder.limit(limit).offset(offset))
             .map(r => {
                 return {
                     id: r.id!,
-                    status: RequestStatus[r.status],
-                    statement_key: r.statement_id,
+                    status: r.status,
+                    statementId: r.statement_id,
                     cost: r.cost,
-                    proof_key: r.proof_id,
+                    proofId: r.proof_id,
                     input: r.input,
-                    aggregated_mode_id: r.aggregated_mode_id,
+                    aggregatedModeId: r.aggregated_mode_id,
                 }
             })
     }
 
+    // DONE
     @Post()
     public async createRequest(
         @Body() request: CreateRequestRequest,
@@ -67,7 +82,7 @@ export class RequestController extends Controller {
             id: undefined,
             created_at: new Date(),
             updated_at: new Date(),
-            statement_id: request.statement_key,
+            statement_id: request.statementId,
             cost: request.cost,
             eval_time: null,
             wait_period: null,
@@ -81,15 +96,16 @@ export class RequestController extends Controller {
         const saved = await insert(entity)
         return  {
             id: saved.id!,
-            status: RequestStatus[saved.status],
-            statement_key: request.statement_key,
+            status: saved.status,
+            statementId: request.statementId,
             cost: request.cost,
-            proof_key: null,
-            aggregated_mode_id: request.aggregatedModeId || null,
+            proofId: null,
+            aggregatedModeId: request.aggregatedModeId || null,
             input: saved.input,
         }
     }
 
+    // DONE
     @Delete('/:id')
     public async deleteRequest(
         @Path("id") id: number,
@@ -100,6 +116,7 @@ export class RequestController extends Controller {
             .delete()
             .where('id', id)
             .where('sender_id', userInfo.id)
+            .where('status', RequestStatus[RequestStatus.NEW])
         if (result < 0) {
             throw new BadRequestError('Request not found')
         }
@@ -108,16 +125,16 @@ export class RequestController extends Controller {
 
 export interface RequestItem {
     id: number,
-    status: string,
-    statement_key: number,
+    status: RequestStatus,
+    statementId: number,
     cost: number,
-    proof_key: number | null,
+    proofId: number | null,
     input: any,
-    aggregated_mode_id: number | null,
+    aggregatedModeId: number | null,
 }
 
 export interface CreateRequestRequest {
-    statement_key: number,
+    statementId: number,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: any,
     cost: number,

@@ -1,8 +1,6 @@
-import {Body, Controller, Get, Header, Post, Route} from "tsoa";
-import {decodeAuthToken, decodeJwt} from "../service/user/hash";
+import {Body, Controller, Header, Post, Route} from "tsoa";
+import {decodeAuthToken} from "../service/user/hash";
 import {registerOrUpdate} from "../service/producer/producer";
-import {dbClient} from "../db/client";
-import {StatementEntity} from "../repository/statement";
 import {findById} from "../repository/user";
 import {BadRequestError} from "../handler/error/error";
 import {findByUserId, remove} from "../repository/producer";
@@ -42,19 +40,6 @@ export class ProducerController extends Controller {
         await remove(producer!.id!)
         return true
     }
-
-    @Get("/last")
-    public async last(): Promise<LastStatementInfo[]>  {
-        // TODO: unclear business logic, from v1
-        const statements = await dbClient<StatementEntity>('statement')
-            .orderBy('created_at', 'DESC');
-        return statements.map(s => {
-            return {
-                id: s.id!,
-                senderId: s.sender_id,
-            }
-        })
-    }
 }
 
 export interface RegisterProducerRequest {
@@ -70,9 +55,4 @@ export interface RegisterProducerResponse {
     description: string,
     url: string,
     ethAddress: string,
-}
-
-export interface LastStatementInfo {
-    id: number,
-    senderId: number,
 }

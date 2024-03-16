@@ -1,41 +1,70 @@
 import {Body, Controller, Delete, Get, Header, Path, Post, Route} from "tsoa";
 import {decodeAuthToken} from "../service/user/hash";
-import {createProposal, getProposals, deleteProposal} from "../service/proposal/proposal";
 import {Query} from "@tsoa/runtime/dist/decorators/parameter";
-import {RequestStatus} from "../repository/request";
+import {insert, ProposalEntity, ProposalStatus} from "../repository/proposal";
+import {dbClient} from "../db/client";
+import {BadRequestError} from "../handler/error/error";
 
 @Route("/proposal")
 export class ProposalController extends Controller {
 
+    // DONE
     @Get("/:id")
     public async getById(
         @Path("id") id: number,
         @Header("authorization") jwt: string | undefined
     ): Promise<ProposalItem> {
-        const userInfo = decodeAuthToken(jwt)
-        const filter = {
-            id: id,
-        } as ProposalFilter
-        console.log(`User ${userInfo.id}: get proposals by id ${id}`)
-        return (await getProposals(userInfo.id, filter, 1, 0))[0]
+        const proposal = await dbClient<ProposalEntity>('proposal')
+            .where('id', id)
+            .first()
+            .select();
+        if (!proposal) {
+            throw new BadRequestError("No proposal")
+        }
+        return {
+            id: proposal.id!,
+            statementId: proposal.statement_id,
+            status: proposal.status,
+            cost: proposal.cost,
+        }
     }
 
+    // DONE
     @Get()
     public async getByFilter(
-        @Query("status") status: RequestStatus,
         @Query("limit") limit: number = 10,
         @Query("offset") offset: number = 0,
+        @Query('owned') owned: boolean = false,
+        @Query('statementId') statementId: number | undefined,
+        @Query('status') status: ProposalStatus | undefined,
         @Header("authorization") jwt: string | undefined,
     ): Promise<ProposalItem[]> {
-        const userInfo = decodeAuthToken(jwt)
-        const filter = {
-            id: undefined,
-            status: status
-        } as ProposalFilter
-        console.log(`User ${userInfo.id}: get proposals by filter ${JSON.stringify(filter)}`)
-        return await getProposals(userInfo.id, filter, limit, offset);
+        let builder = dbClient<ProposalEntity>('proposal')
+        if (status) {
+            builder = builder.where('status', ProposalStatus[status])
+        }
+        if (owned) {
+            const userInfo = decodeAuthToken(jwt)
+            builder = builder.where('sender_id', userInfo.id)
+        }
+        if (statementId) {
+            builder = builder.where('statement_id', statementId)
+        }
+        const proposals = await builder
+            .limit(limit)
+            .offset(offset)
+            .orderBy('created_at', 'desc')
+        return proposals.map(r => {
+            return {
+                statementId: r.statement_id,
+                status: r.status,
+                id: r.id!,
+                cost: r.cost,
+            }
+        })
     }
 
+    // DONE
     @Post()
     public async createProposal(
         @Body() request: CreateProposalRequest,
@@ -43,33 +72,58 @@ export class ProposalController extends Controller {
     ): Promise<ProposalItem> {
         const userInfo = decodeAuthToken(jwt)
         console.log(`User ${userInfo.id}: create proposal - ${JSON.stringify(request)}`)
-        return await createProposal(userInfo.id, request)
+        const proposal = {
+            id: undefined,
+            created_at: new Date(),
+            updated_at: new Date(),
+            statement_id: request.statementId,
+            cost: request.cost,
+            sender_id: userInfo.id,
+            waiting_duration_seconds: request.waitingDurationSeconds,
+            max_generation_duration_seconds: request.maxGenerationDurationSeconds,
+            status: ProposalStatus.NEW,
+            matched_time: null,
+            request_id: null,
+            proof_id: null,
+            generation_time: null,
+        } as ProposalEntity
+        const saved = await insert(proposal)
+        return {
+            statementId: saved.statement_id,
+            id: saved.id!,
+            cost: saved.cost,
+            status: saved.status,
+        }
     }
 
+    // DONE
     @Delete("/:id")
     public async deleteProposal(
         @Path("id") id: number,
         @Header("authorization") jwt: string | undefined
     ): Promise<void> {
-        const userInfo = decodeAuthToken(jwt);
-        await deleteProposal(id, userInfo.id)
+        const userInfo = decodeAuthToken(jwt)
+        const result = await dbClient<ProposalEntity>('proposal')
+            .delete()
+            .where('id', id)
+            .where('sender_id', userInfo.id)
+            .where('status', ProposalStatus[ProposalStatus.NEW])
+        if (result < 1) {
+            throw new BadRequestError('Proposal not found')
+        }
     }
 }
 
-export interface ProposalFilter {
-    id: number | undefined,
-    status: RequestStatus | undefined,
-}
-
 export interface ProposalItem {
-    statement_key: string,
-    request_key: string,
-    _key: string,
+    statementId: number,
+    id: number,
+    cost: number,
+    status: ProposalStatus,
 }
 
 export interface CreateProposalRequest {
-    request_id: string,
+    statementId: number,
     cost: number,
-    aggregated_mode_id: number | undefined,
-    wait_period_in_seconds: number,
+    waitingDurationSeconds: number,
+    maxGenerationDurationSeconds: number,
 }

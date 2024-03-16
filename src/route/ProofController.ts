@@ -4,12 +4,11 @@ import {findById as findProofById, insert as insertProof, ProofEntity} from "../
 import {BadRequestError} from "../handler/error/error";
 import {decodeAuthToken} from "../service/user/hash";
 import {findById as findRequestById, RequestStatus, update as updateRequest} from "../repository/request";
-import {dbClient} from "../db/client";
 
 @Route("/proof")
 export class ProofController extends Controller {
 
-    @Get(":id")
+    @Get("/:id")
     public async getById(
         @Query("id") id: number,
     ): Promise<ProofItem> {
@@ -21,48 +20,6 @@ export class ProofController extends Controller {
             id: proof.id!,
             proof: proof.proof
         }
-    }
-
-    @Get('/owned')
-    public async getOwnedProofs(
-        @Query("limit") limit: number = 10,
-        @Query("offset") offset: number = 0,
-        @Header("authorization") jwt: string | undefined,
-    ): Promise<ProofOwnedItem[]> {
-        const userInfo = decodeAuthToken(jwt)
-        const result = await dbClient('request as r')
-            .select(
-                'p.id AS id',
-                'p.proof AS proof',
-                'p.request_id AS request_id',
-                'p.producer_id AS producer_id',
-                'p.generation_time AS generation_time',
-                'r.input AS input',
-                's._key AS statement_key',
-                's.name AS name',
-                's.description as description'
-            )
-            .leftJoin('proof as p', 'r.proof_key', 's.id')
-            .leftJoin('statement as s', 'r.statement_key', 's._key')
-            .where('r.sender', userInfo.id)
-            .where('r.status', 'completed')
-            .orderBy('r.updatedOn', 'desc')
-            .limit(limit)
-            .offset(offset);
-        return result.map(e => {
-            return {
-                id: e.id,
-                proof: e.proof,
-                requestId: e.request_id,
-                producerId: e.producer_id,
-                generationTime: e.generation_time,
-                input: e.input,
-                statementId: e.statement_id,
-                statementName: e.name,
-                description: e.description,
-                statementDescription: e.description,
-            }
-        })
     }
 
     @Post()
@@ -84,6 +41,7 @@ export class ProofController extends Controller {
             producer_id: userInfo.id,
             generation_time: new Date().getTime() - requestEntity.created_at.getTime(),
         }
+        // TODO: validate proof
         const saved = await insertProof(proof);
         console.log(`save proof - ${saved.id}`)
         requestEntity.status = RequestStatus.DONE

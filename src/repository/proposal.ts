@@ -17,14 +17,13 @@ export interface ProposalEntity {
     statement_id: number,
     cost: number,
     sender_id: number,
-    wait_period: number,
-    eval_time: number | null,
+    waiting_duration_seconds: number,
+    max_generation_duration_seconds: number | null,
     status: ProposalStatus,
     matched_time: Date | null,
-    request_id: number,
+    request_id: number | null,
     proof_id: number | null,
     generation_time: number | null,
-    aggregated_mode_id: number | null,
 }
 
 export enum ProposalStatus {

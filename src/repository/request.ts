@@ -42,8 +42,7 @@ export interface RequestEntity {
     cost: number,
     eval_time: number | null,
     wait_period: number | null,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-    input: any,
+    input: string,
     sender_id: number,
     status: RequestStatus,
     proof_id: number | null,
