@@ -6,7 +6,7 @@ export class SystemController extends Controller {
     @Get("/info")
     public systemInfo(): SystemInfo {
         return {
-            depositAddress: "// TODO: hardcode",
+            depositAddress: "0x1ed7daacb963a579D83f3c1569BDA7D199a02A4E",
             network: "SEPOLIA",
         }
     }

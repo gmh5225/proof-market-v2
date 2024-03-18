@@ -32,3 +32,10 @@
 10. Collection request input from request and generate proof
 11. Submit proof (POST /proof)
 12. Return to step 8
+
+
+# Configs(DEV)
+
+- Network - ETH SEPOLIA
+- Contract - 0x1ed7daacb963a579D83f3c1569BDA7D199a02A4E
+- Admin PK - b4f1d55cb2c640305904c085ddf919865510d7da5d1023a919e2330d3db4b055
