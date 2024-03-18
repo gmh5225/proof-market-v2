@@ -1,4 +1,5 @@
 import {dbClient} from '../db/client'
+import {RequestEntity} from "./request";
 
 export async function insert(entity: StatementEntity): Promise<StatementEntity> {
 	const txIds = await dbClient<StatementEntity>('statement')
@@ -8,6 +9,12 @@ export async function insert(entity: StatementEntity): Promise<StatementEntity> 
 		...entity,
 		id: txIds[0].id,
 	}
+}
+
+export async function findById(id: number): Promise<StatementEntity | undefined> {
+    return dbClient<StatementEntity>('statement')
+        .where('id', id)
+        .first()
 }
 
 export interface StatementEntity {

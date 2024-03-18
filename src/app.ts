@@ -2,11 +2,11 @@ import {dbClient} from "./db/client";
 import Koa from "koa";
 import yamljs from "yamljs";
 import {koaSwagger} from "koa2-swagger-ui";
-import {initRequestMatcher} from "./service/request/matcher";
 import bodyParser from "koa-bodyparser";
 import {handleError} from "./handler/error/error";
 import KoaRouter from "@koa/router";
 import {RegisterRoutes} from "./tsoa/routes";
+import {initRequestMatcher} from "./service/matcher/book_matcher";
 
 async function migrateDb() {
     try {

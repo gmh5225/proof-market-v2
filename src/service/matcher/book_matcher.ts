@@ -1,7 +1,20 @@
 import {dbClient} from "../../db/client";
 import {ProposalEntity, ProposalStatus} from "../../repository/proposal";
 import {RequestEntity, RequestStatus} from "../../repository/request";
+import {BookMatchEntity, BookMatchStatus} from "../../repository/book_match";
+import {findById} from "../../repository/statement";
+import {schedule} from "node-cron";
 
+export function initRequestMatcher() {
+    schedule('*/1 * * * *', async () => {
+        try {
+            console.log("Start matcher")
+            await match()
+        } catch (e) {
+            console.error(`Matcher error: ${e}`)
+        }
+    })
+}
 
 export async function match() {
     const proposals = await dbClient<ProposalEntity>('proposal')
@@ -36,7 +49,7 @@ async function matchInStatement(
 
         if (matchingProposalIndex !== -1) {
             const matchingProposal = proposals[matchingProposalIndex];
-            matchAction(statementId, matchingProposal, request)
+            await matchAction(statementId, matchingProposal, request)
 
             proposals.splice(matchingProposalIndex, 1);
         }
@@ -54,7 +67,7 @@ function groupByStatementId<T extends { statement_id: number }>(entities: T[]): 
     }, {});
 }
 
-function matchAction(
+async function matchAction(
     statementId: number,
     proposal: ProposalEntity,
     request: RequestEntity,
@@ -67,5 +80,25 @@ function matchAction(
     proposal.updated_at = new Date()
     proposal.request_id = request.id!
 
-    // TODO: save and create proposal_request
+    const statement = (await findById(statementId))!
+
+    dbClient<RequestEntity>('request').update(request)
+    dbClient<ProposalEntity>('proposal').update(proposal)
+
+    const bookMatch = {
+        id: undefined,
+        created_at: new Date(),
+        updated_at: new Date(),
+        statement_id: statementId,
+        proposal_id: proposal.id!,
+        request_id: request.id!,
+        cost: request.cost,
+        status: BookMatchStatus.ACTIVE,
+        proof_id: null,
+        input: request.input!,
+        definition: statement.definition,
+        assigned_id: proposal.sender_id,
+    } as BookMatchEntity
+
+    dbClient<BookMatchEntity>('book_match').insert(bookMatch)
 }
