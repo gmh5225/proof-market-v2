@@ -1,4 +1,4 @@
-import {Controller, Get, Path, Route} from "tsoa";
+import {Controller, Get, Route} from "tsoa";
 
 @Route("/system")
 export class SystemController extends Controller {
