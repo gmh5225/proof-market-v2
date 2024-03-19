@@ -18,7 +18,7 @@ export interface ProposalEntity {
     cost: number,
     sender_id: number,
     waiting_duration_seconds: number,
-    max_generation_duration_seconds: number | null,
+    max_generation_duration_seconds: number,
     status: ProposalStatus,
     matched_time: Date | null,
     request_id: number | null,

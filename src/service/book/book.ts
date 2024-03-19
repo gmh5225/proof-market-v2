@@ -8,22 +8,22 @@ export async function statementBook(
     statementId: number,
 ): Promise<StatementBook> {
     const proposals = await dbClient<ProposalEntity>('proposal')
-        .where('status', ProposalStatus[ProposalStatus.NEW])
+        .where('status', ProposalStatus.NEW)
         .where('statement_id', statementId)
         .orderBy('cost', 'asc')
         .select();
     const requests = await dbClient<RequestEntity>('request')
-        .where('status', RequestStatus[RequestStatus.NEW])
+        .where('status', RequestStatus.NEW)
         .where('statement_id', statementId)
         .orderBy('cost', 'desc')
         .select();
     const processingMatchCount = await dbClient('book_match')
         .where('statement_id', statementId)
-        .where('status', BookMatchStatus[BookMatchStatus.ACTIVE])
-        .count<number>();
+        .where('status', BookMatchStatus.ACTIVE)
+        .count<SqlCountResult[]>();
     const lastMatch = await dbClient<BookMatchEntity>('book_match')
         .where('statement_id', statementId)
-        .where('status', BookMatchStatus[BookMatchStatus.FINISHED])
+        .where('status', BookMatchStatus.FINISHED)
         .first()
         .select();
     return {
@@ -41,6 +41,10 @@ export async function statementBook(
         }),
         lastMatchCost: lastMatch?.cost || null,
         instantMatchCost: proposals[0]?.cost || null,
-        processingMatchCount: processingMatchCount,
+        processingMatchCount: parseInt(processingMatchCount[0].count),
     }
+}
+
+interface SqlCountResult {
+    count: string,
 }

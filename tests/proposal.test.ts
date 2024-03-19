@@ -19,17 +19,13 @@ describe('proposal flow', () => {
     it('create proposal and get if=t', async () => {
         const userEntity = await insert({
             id: undefined,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            login: 'test user',
-            password: 'pass hash',
-            email: 'test@test.com',
-            balance: BigInt(0),
+            created_at: new Date(),
+            address: 'test_address',
             producer: false,
         });
 
         const fetched = await findById(userEntity.id!);
-        expect(fetched?.login).toEqual(userEntity.login)
+        expect(fetched?.address).toEqual(userEntity.address)
         expect(fetched?.id).toBeDefined()
     })
 })

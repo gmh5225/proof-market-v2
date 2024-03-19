@@ -4,11 +4,11 @@ import {Controller, Get, Route} from "tsoa";
 export class SystemController extends Controller {
 
     @Get("/info")
-    public systemInfo(): SystemInfo {
-        return {
+    public systemInfo(): Promise<SystemInfo> {
+        return Promise.resolve({
             depositAddress: "0x1ed7daacb963a579D83f3c1569BDA7D199a02A4E",
             network: "SEPOLIA",
-        }
+        })
     }
 }
 

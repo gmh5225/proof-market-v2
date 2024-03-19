@@ -1,5 +1,4 @@
 import {dbClient} from '../db/client'
-import {RequestEntity} from "./request";
 
 export async function insert(entity: StatementEntity): Promise<StatementEntity> {
 	const txIds = await dbClient<StatementEntity>('statement')
@@ -25,8 +24,7 @@ export interface StatementEntity {
     description: string,
     url: string,
     input_description: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    definition: any,
+    definition: string,
     type: string,
     sender_id: number,
 }

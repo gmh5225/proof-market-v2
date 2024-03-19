@@ -13,35 +13,22 @@ describe('book flow', () => {
         await down(dbClient)
         await up(dbClient)
     })
-    //
-    // afterEach(async () => {
-    //     await down(dbClient)
-    // })
 
     it('get book for statement', async () => {
         const userEntity = await insertUser({
             id: undefined,
             created_at: new Date(),
-            updated_at: new Date(),
-            login: 'test user',
-            password: 'pass hash',
-            email: 'test@test.com',
-            balance: BigInt(0),
+            address: "address",
             producer: false,
         });
 
         const statement = await insertStatement({
-            avg_cost: 0,
-            avg_generation_time: 0,
-            completed: false,
             created_at: new Date(),
-            definition: {},
+            definition: "{}",
             description: "description",
             id: undefined,
             input_description: "inputDescription",
-            monitoring: false,
             name: "statement",
-            private: false,
             sender_id: userEntity.id!,
             type: "type",
             updated_at: new Date(),
@@ -55,7 +42,7 @@ describe('book flow', () => {
             created_at: new Date(),
             eval_time: 1,
             id: undefined,
-            input: {},
+            input: "{}",
             proof_id: null,
             sender_id: userEntity.id!,
             statement_id: statement.id!,
@@ -65,10 +52,8 @@ describe('book flow', () => {
         });
 
         const proposalEntity = await insertProposal({
-            aggregated_mode_id: null,
             cost: 0,
             created_at: new Date(),
-            eval_time: 1,
             generation_time: 1,
             id: undefined,
             matched_time: new Date(),
@@ -78,13 +63,11 @@ describe('book flow', () => {
             statement_id: statement.id!,
             status: ProposalStatus.NEW,
             updated_at: new Date(),
-            wait_period: 1
+            waiting_duration_seconds: 100,
+            max_generation_duration_seconds: 100,
         });
 
         const book = await statementBook(
-            userEntity.id!,
-            1,
-            1,
             statement.id!
         );
 
