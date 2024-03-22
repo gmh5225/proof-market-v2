@@ -1,12 +1,13 @@
 import {dbClient} from "./db/client";
 import Koa from "koa";
-import yamljs from "yamljs";
 import {koaSwagger} from "koa2-swagger-ui";
 import bodyParser from "koa-bodyparser";
 import {handleError} from "./handler/error/error";
 import KoaRouter from "@koa/router";
 import {RegisterRoutes} from "./tsoa/routes";
 import {initRequestMatcher} from "./service/matcher/book_matcher";
+import {swaggerLocalPath} from './config/props'
+import fs from "fs";
 
 async function migrateDb() {
     try {
@@ -18,8 +19,9 @@ async function migrateDb() {
     }
 }
 
+
 function swaggerUi(): Koa.Middleware {
-    const spec = yamljs.load('./openapi.yaml')
+    const spec = JSON.parse(fs.readFileSync(swaggerLocalPath, 'utf8'))
     return koaSwagger({ swaggerOptions: { spec }})
 }
 
