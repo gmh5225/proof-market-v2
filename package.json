@@ -10,7 +10,8 @@
     "spec": "tsoa spec",
     "routes": "tsoa routes",
     "generate": "npm run spec && npm run routes",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint . --ext .ts --fix"
   },
   "keywords": [],
   "author": "",

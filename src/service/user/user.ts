@@ -2,12 +2,12 @@ import jwt from 'jsonwebtoken'
 import {jwtSecret} from '../../config/props'
 import {BadRequestError} from '../../handler/error/error'
 import {findByAddress, findById, insert, UserEntity} from '../../repository/user'
-import {getBalance} from "../blockchain/client";
+import {getBalance} from '../blockchain/client'
 
 export async function authUser(
 	address: string,
 ): Promise<AuthUser> {
-	const userOpt = await findByAddress(address);
+	const userOpt = await findByAddress(address)
 	if (!userOpt) {
 		const saved = await insert({
 			id: undefined,

@@ -2,7 +2,7 @@ import {BadRequestError} from '../../handler/error/error'
 import {existsById} from '../../repository/user'
 import {changeBalance, userBalanceInfo} from '../user/balance'
 import {insert, TransactionEntity} from '../../repository/transaction'
-import {PayRequest} from "../../route/UserController";
+import {PayRequest} from '../../route/UserController'
 
 export async function createPayTransaction(request: PayRequest, userId: number): Promise<TransactionInfo> {
 	if (request.sender !== userId) {

@@ -1,10 +1,10 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import dotenv from 'dotenv'
+dotenv.config()
 
-import {setupTracing} from "./instrumentation"
+import {setupTracing} from './instrumentation'
 setupTracing('proof-market-v2')
 
-import {startApp} from "./app";
+import {startApp} from './app'
 
 startApp()
 	.then(() => {

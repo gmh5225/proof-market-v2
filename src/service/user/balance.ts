@@ -1,7 +1,7 @@
 import {BadRequestError} from '../../handler/error/error'
-import {findById, update} from '../../repository/user'
+import {findById} from '../../repository/user'
 import {userBlockedTokensAmount} from '../request/request'
-import {getBalance, transfer} from "../blockchain/client";
+import {getBalance} from '../blockchain/client'
 
 export async function userBalanceInfo(userId: number): Promise<UserBalanceInfo> {
 	const user = await findById(userId)

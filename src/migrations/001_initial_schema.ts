@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
 			table.timestamp('created_at').notNullable()
 			table.text('address').notNullable()
 			table.boolean('producer').notNullable().defaultTo(false)
-		});
+		})
 	}
 
 	if (!(await knex.schema.hasTable('transaction'))) {

@@ -11,9 +11,9 @@ export async function insert(entity: StatementEntity): Promise<StatementEntity> 
 }
 
 export async function findById(id: number): Promise<StatementEntity | undefined> {
-    return dbClient<StatementEntity>('statement')
-        .where('id', id)
-        .first()
+	return dbClient<StatementEntity>('statement')
+		.where('id', id)
+		.first()
 }
 
 export interface StatementEntity {

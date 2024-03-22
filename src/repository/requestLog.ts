@@ -1,5 +1,5 @@
 import {dbClient} from '../db/client'
-import {RequestStatus} from "./request";
+import {RequestStatus} from './request'
 
 export async function insert(entity: RequestLogEntity): Promise<RequestLogEntity> {
 	const txIds = await dbClient<RequestLogEntity>('request_log')
