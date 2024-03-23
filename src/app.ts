@@ -8,7 +8,8 @@ import {RegisterRoutes} from './tsoa/routes'
 import {initRequestMatcher} from './service/matcher/book_matcher'
 import {swaggerLocalPath} from './config/props'
 import fs from 'fs'
-console.log()
+import cors from '@koa/cors'
+
 async function migrateDb() {
 	try {
 		await dbClient.migrate.latest()
@@ -22,7 +23,7 @@ async function migrateDb() {
 
 function swaggerUi(): Koa.Middleware {
 	const spec = JSON.parse(fs.readFileSync(swaggerLocalPath, 'utf8'))
-	return koaSwagger({ swaggerOptions: { spec }})
+	return koaSwagger({swaggerOptions: {spec}})
 }
 
 function initTasks() {
@@ -33,7 +34,11 @@ export function buildApp() {
 	const app = new Koa()
 	const route = new KoaRouter()
 	RegisterRoutes(route)
-	app.use(route.allowedMethods())
+	// TODO: Restrict allowed origins for better security in production
+	app.use(cors({
+		origin: '*', // Allows requests from any origin
+	}))
+		.use(route.allowedMethods())
 		.use(bodyParser())
 		.use(handleError)
 		.use(swaggerUi())
