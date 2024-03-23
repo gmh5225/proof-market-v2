@@ -9,10 +9,33 @@ import {diag, DiagConsoleLogger, DiagLogLevel} from '@opentelemetry/api'
 import {jaegerHost} from './config/props'
 import {JaegerExporter} from '@opentelemetry/exporter-jaeger'
 import {tracer} from 'dd-trace'
+import {useDatadog, useOpenTelemetry} from './config/props'
 
+/**
+ * Initializes application tracing
+ * Supported tracing options:
+ * 1. DataDog (default) - Set `useDatadog` to 'true' to enable
+ * 2. OpenTelemetry - Set `useOpenTelemetry` to 'true' to enable
+ * If neither is set, no tracing will be started
+ *
+ * @param serviceName The name of the service for which tracing is being set up
+ */
 export const setupTracing = (serviceName: string) => {
-	// Use datadog lib instead
-	if (process.env.OPENTELEMETRY) {
+	if (useDatadog === 'true') {
+		// TODO: For deployment, consider adding env variables for `url`, or `hostname` and `port`
+		tracer.init({
+			logInjection: true,
+			service: serviceName,
+			startupLogs: true,
+			runtimeMetrics: true,
+		})
+		console.log('Use datadog tracer')
+	}
+
+	if (useOpenTelemetry === 'true') {
+		// TODO: The JaegerAgent is being deprecated (see: https://github.com/jaegertracing/jaeger/issues/4739).
+		// Refer to the Jaeger documentation on architecture (https://www.jaegertracing.io/docs/1.55/architecture/#agent)
+		// to understand the necessary adjustments for this deprecation.
 		diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO)
 		const provider = new NodeTracerProvider({
 			resource: new Resource({
@@ -32,13 +55,9 @@ export const setupTracing = (serviceName: string) => {
 		provider.register()
 		api.trace.getTracer(serviceName)
 		console.log('Use opentelemetry tracer')
-	} else {
-		tracer.init({
-			logInjection: true,
-			service: 'proof-market-v2',
-			startupLogs: true,
-			runtimeMetrics: true,
-		})
-		console.log('Use datadog tracer')
+	}
+
+	if (useDatadog !== 'true' && useOpenTelemetry !== 'true') {
+		console.log('No tracer is used.')
 	}
 }
