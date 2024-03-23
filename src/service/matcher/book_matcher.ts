@@ -4,14 +4,15 @@ import {RequestEntity, RequestStatus} from '../../repository/request'
 import {BookMatchEntity, BookMatchStatus} from '../../repository/book_match'
 import {findById} from '../../repository/statement'
 import {schedule} from 'node-cron'
+import logger from '../../logger'
 
 export function initRequestMatcher() {
 	schedule('*/1 * * * *', async () => {
 		try {
-			console.log('Start matcher')
+			logger.info('Start matcher')
 			await match()
 		} catch (e) {
-			console.error(`Matcher error: ${e}`)
+			logger.error(`Matcher error: ${e}`)
 		}
 	})
 }
@@ -27,7 +28,7 @@ export async function match() {
 
 	for (const statementIdStr of Object.keys(proposalsByStatementId)) {
 		const statementId = parseInt(statementIdStr)
-		console.log(`Find matching for statement ${statementId}`)
+		logger.info(`Find matching for statement ${statementId}`)
 		await matchInStatement(
 			statementId,
 			proposalsByStatementId[statementId] || [],

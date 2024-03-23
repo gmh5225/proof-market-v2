@@ -1,11 +1,12 @@
 import Koa from 'koa'
+import logger from '../../logger'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function handleError(ctx: Koa.ParameterizedContext<any>, next: Koa.Next) {
 	try {
 		await next()
 	} catch (err) {
-		console.log(err)
+		logger.error(err)
 		if (err instanceof ApplicationError) {
 			ctx.status = err.status
 			ctx.body = {

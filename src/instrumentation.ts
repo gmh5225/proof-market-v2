@@ -10,6 +10,7 @@ import {jaegerHost} from './config/props'
 import {JaegerExporter} from '@opentelemetry/exporter-jaeger'
 import {tracer} from 'dd-trace'
 import {useDatadog, useOpenTelemetry} from './config/props'
+import logger from './logger'
 
 /**
  * Initializes application tracing
@@ -29,7 +30,7 @@ export const setupTracing = (serviceName: string) => {
 			startupLogs: true,
 			runtimeMetrics: true,
 		})
-		console.log('Use datadog tracer')
+		logger.info('Use datadog tracer')
 	}
 
 	if (useOpenTelemetry === 'true') {
@@ -54,10 +55,10 @@ export const setupTracing = (serviceName: string) => {
 		})
 		provider.register()
 		api.trace.getTracer(serviceName)
-		console.log('Use opentelemetry tracer')
+		logger.info('Use opentelemetry tracer')
 	}
 
 	if (useDatadog !== 'true' && useOpenTelemetry !== 'true') {
-		console.log('No tracer is used.')
+		logger.info('No tracer is used.')
 	}
 }

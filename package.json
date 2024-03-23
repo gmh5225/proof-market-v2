@@ -46,6 +46,7 @@
     "reflect-metadata": "^0.2.1",
     "tsoa": "^6.0.0",
     "viem": "^2.7.15",
+    "winston": "^3.12.0",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

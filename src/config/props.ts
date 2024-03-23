@@ -1,4 +1,6 @@
 export const dbUrl = process.env.DB_URL || 'postgresql://proof_market:proof_market_pass@localhost:15433/proof_market'
+
+export const logLevel = process.env.LOG_LEVEL || 'info'
 export const swaggerLocalPath = process.env.SWAGGER_LOCAL_PATH || './tsoa-output/swagger.json'
 export const saltRounds = parseInt(process.env.SALT_ROUNDS || '10')
 export const jwtSecret = process.env.JWT_SECRET || 'jwtSecret'

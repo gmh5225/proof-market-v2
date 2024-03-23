@@ -4,6 +4,7 @@ import {Query} from '@tsoa/runtime/dist/decorators/parameter'
 import {insert, ProposalEntity, ProposalStatus} from '../repository/proposal'
 import {dbClient} from '../db/client'
 import {BadRequestError} from '../handler/error/error'
+import logger from '../logger'
 
 @Route('/proposal')
 export class ProposalController extends Controller {
@@ -72,7 +73,7 @@ export class ProposalController extends Controller {
 		@Header('authorization') jwt: string | undefined,
 	): Promise<ProposalItem> {
 		const userInfo = decodeAuthToken(jwt)
-		console.log(`User ${userInfo.id}: create proposal - ${JSON.stringify(request)}`)
+		logger.info(`User ${userInfo.id}: create proposal - ${JSON.stringify(request)}`)
 		const proposal = {
 			id: undefined,
 			created_at: new Date(),

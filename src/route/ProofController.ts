@@ -4,6 +4,7 @@ import {findById as findProofById, insert as insertProof, ProofEntity} from '../
 import {BadRequestError} from '../handler/error/error'
 import {decodeAuthToken} from '../service/user/hash'
 import {findById as findRequestById, RequestStatus, update as updateRequest} from '../repository/request'
+import logger from '../logger'
 
 @Route('/proof')
 export class ProofController extends Controller {
@@ -43,12 +44,12 @@ export class ProofController extends Controller {
 		}
 		// TODO: validate proof
 		const saved = await insertProof(proof)
-		console.log(`save proof - ${saved.id}`)
+		logger.info(`save proof - ${saved.id}`)
 		requestEntity.status = RequestStatus.DONE
 		requestEntity.updated_at = new Date()
 		requestEntity.proof_id = saved.id!
 		requestEntity.input = JSON.stringify(requestEntity.input)
-		console.log(`save request - ${JSON.stringify(request)}`)
+		logger.info(`save request - ${JSON.stringify(request)}`)
 		await updateRequest(requestEntity)
 		return {
 			id: saved.id!,

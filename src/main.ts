@@ -2,6 +2,8 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+import logger from './logger'
+
 import {setupTracing} from './instrumentation'
 
 setupTracing('proof-market-v2')
@@ -10,10 +12,10 @@ import {startApp} from './app'
 
 startApp()
 	.then(() => {
-		console.log('Started')
+		logger.info('Started')
 	})
 
 process.on('uncaughtException', (err) => {
-	console.error('Unhandled Exception', err)
+	logger.error('Unhandled Exception', err)
 	process.exit(1)
 })
