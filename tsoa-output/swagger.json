@@ -353,53 +353,17 @@
 			},
 			"RegisterProducerResponse": {
 				"properties": {
-					"userId": {
+					"id": {
 						"type": "number",
 						"format": "double"
 					},
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"url": {
-						"type": "string"
-					},
-					"ethAddress": {
-						"type": "string"
+					"result": {
+						"type": "boolean"
 					}
 				},
 				"required": [
-					"userId",
-					"name",
-					"description",
-					"url",
-					"ethAddress"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"RegisterProducerRequest": {
-				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"url": {
-						"type": "string"
-					},
-					"ethAddress": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"name",
-					"description",
-					"url",
-					"ethAddress"
+					"id",
+					"result"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -1200,17 +1164,7 @@
 							"type": "string"
 						}
 					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/RegisterProducerRequest"
-							}
-						}
-					}
-				}
+				]
 			}
 		},
 		"/producer/deregister": {
@@ -1222,7 +1176,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "boolean"
+									"$ref": "#/components/schemas/RegisterProducerResponse"
 								}
 							}
 						}
