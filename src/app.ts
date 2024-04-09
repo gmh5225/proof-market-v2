@@ -60,5 +60,5 @@ export async function startApp() {
 	const app = buildApp()
 	initTasks()
 
-	app.listen(8081)
+	app.listen(80)
 }
