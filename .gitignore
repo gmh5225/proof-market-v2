@@ -9,3 +9,4 @@ dist/
 
 # Environment variables
 .env
+app.log

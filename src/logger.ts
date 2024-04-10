@@ -1,5 +1,6 @@
 import winston from 'winston'
 import {logLevel} from './config/props'
+import DailyRotateFile from "winston-daily-rotate-file";
 
 // Define custom colors for different log levels
 winston.addColors({
@@ -25,8 +26,14 @@ export default winston.createLogger({
 		}),
 	),
 	transports: [
-		// TODO: We can add more transports if needed (ex. to file)
-		// Use something like https://www.npmjs.com/package/winston-daily-rotate-file
 		new winston.transports.Console(),
+		new DailyRotateFile({
+			level: 'info',
+			filename: 'app.log',
+			datePattern: 'YYYY-MM-DD-HH',
+			zippedArchive: true,
+			maxSize: '100m',
+			maxFiles: '14d'
+		})
 	],
 })
