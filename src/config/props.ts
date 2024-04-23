@@ -13,3 +13,4 @@ export const blockchainPrivateKey = process.env.BLOCKCHAIN_PRIVATE_KEY || '0xb4f
 export const blockchainContractAddress = process.env.BLOCKCHAIN_CONTRACT_ADDRESS || '0xd6c12d88BCcD93AC2d326b3d1CCf5b90063884D0'
 export const useDatadog = process.env.USE_DATADOG || true
 export const useOpenTelemetry = process.env.USE_OPENTELEMETRY || false
+export const assignerPath = process.env.ASSIGNER_PATH || './path/to/assigner'
