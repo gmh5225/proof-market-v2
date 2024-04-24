@@ -170,9 +170,9 @@ const models: TsoaRoute.Models = {
     "SubmitProofRequest": {
         "dataType": "refObject",
         "properties": {
-            "proof": {"dataType":"any","required":true},
-            "request_key": {"dataType":"double","required":true},
-            "proposal_key": {"dataType":"double","required":true},
+            "proof": {"dataType":"string","required":true},
+            "requestId": {"dataType":"double","required":true},
+            "proposalId": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -180,22 +180,8 @@ const models: TsoaRoute.Models = {
     "RegisterProducerResponse": {
         "dataType": "refObject",
         "properties": {
-            "userId": {"dataType":"double","required":true},
-            "name": {"dataType":"string","required":true},
-            "description": {"dataType":"string","required":true},
-            "url": {"dataType":"string","required":true},
-            "ethAddress": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "RegisterProducerRequest": {
-        "dataType": "refObject",
-        "properties": {
-            "name": {"dataType":"string","required":true},
-            "description": {"dataType":"string","required":true},
-            "url": {"dataType":"string","required":true},
-            "ethAddress": {"dataType":"string","required":true},
+            "id": {"dataType":"double","required":true},
+            "result": {"dataType":"boolean","required":true},
         },
         "additionalProperties": false,
     },
@@ -697,7 +683,6 @@ export function RegisterRoutes(router: KoaRouter) {
 
             async function ProducerController_register(context: any, next: any) {
             const args = {
-                    request: {"in":"body","name":"request","required":true,"ref":"RegisterProducerRequest"},
                     jwt: {"in":"header","name":"authorization","required":true,"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
             };
 

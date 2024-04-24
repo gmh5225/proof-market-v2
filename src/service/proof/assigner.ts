@@ -12,9 +12,9 @@ import logger from "../../logger";
 
 
 export async function assign(
-    requestId: string,
-    statementId: string,
-) {
+    requestId: number,
+    statementId: number,
+): Promise<AssignerResult> {
     const statement = await dbClient<StatementEntity>('statement')
         .where('id', statementId)
         .first()
@@ -30,7 +30,10 @@ export async function assign(
         throw new NotFoundError(`Request ${requestId} not found`)
     }
     const assignerResult = runAssigner(statement, request)
-
+    if (!assignerResult.result) {
+        throw new NotFoundError(`Illegal proof: ${assignerResult.error}`)
+    }
+    return assignerResult
 }
 
 function runAssigner(
@@ -57,10 +60,12 @@ function runAssigner(
         logger.info(`Temporary file created at: ${inputPath}`)
     })
     let result = true
+    let err = null
     exec(`${assignerPath} -b ${provingKeyPath} -i ${inputPath} -t ${assignmentPath} -c ${circuitPath} -e pallas`,
         (error, stdout, stderr) => {
             logger.info(`Run ${assignerPath} -b ${provingKeyPath} -i ${inputPath} -t ${assignmentPath} -c ${circuitPath} -e pallas`)
             if (error) {
+                err = error
                 logger.error(`exec error : ${error}`)
                 result = false
                 return
@@ -70,6 +75,9 @@ function runAssigner(
         })
     return {
         result: result,
+        error: err,
+        uuid: uuid,
+        dir: tempDir,
         assignmentPath: assignmentPath,
         circuitPath: circuitPath,
     }
@@ -77,6 +85,9 @@ function runAssigner(
 
 export interface AssignerResult {
     result: boolean
+    error: string | null
+    uuid: string
+    dir: string
     assignmentPath: string
     circuitPath: string
 }

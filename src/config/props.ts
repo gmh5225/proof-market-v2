@@ -14,3 +14,4 @@ export const blockchainContractAddress = process.env.BLOCKCHAIN_CONTRACT_ADDRESS
 export const useDatadog = process.env.USE_DATADOG || true
 export const useOpenTelemetry = process.env.USE_OPENTELEMETRY || false
 export const assignerPath = process.env.ASSIGNER_PATH || './path/to/assigner'
+export const proofGeneratorPath = process.env.PROOF_GENERATOR_PATH || './path/to/generator'

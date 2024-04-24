@@ -333,20 +333,22 @@
 			},
 			"SubmitProofRequest": {
 				"properties": {
-					"proof": {},
-					"request_key": {
+					"proof": {
+						"type": "string"
+					},
+					"requestId": {
 						"type": "number",
 						"format": "double"
 					},
-					"proposal_key": {
+					"proposalId": {
 						"type": "number",
 						"format": "double"
 					}
 				},
 				"required": [
 					"proof",
-					"request_key",
-					"proposal_key"
+					"requestId",
+					"proposalId"
 				],
 				"type": "object",
 				"additionalProperties": false

@@ -1,10 +1,12 @@
-import {Body, Controller, Get, Header, Post, Route, UploadedFile} from 'tsoa'
+import {Body, Controller, Get, Header, Post, Route} from 'tsoa'
 import {Query} from '@tsoa/runtime/dist/decorators/parameter'
 import {findById as findProofById, insert as insertProof, ProofEntity} from '../repository/proof'
 import {BadRequestError} from '../handler/error/error'
 import {decodeAuthToken} from '../service/user/hash'
 import {findById as findRequestById, RequestStatus, update as updateRequest} from '../repository/request'
 import logger from '../logger'
+import {assign} from "../service/proof/assigner";
+import {verify} from "../service/proof/verifier";
 
 @Route('/proof')
 export class ProofController extends Controller {
@@ -29,7 +31,7 @@ export class ProofController extends Controller {
 		@Header('authorization') jwt: string | undefined,
 	): Promise<ProofItem> {
 		const userInfo = decodeAuthToken(jwt)
-		const requestEntity = await findRequestById(request.request_key)
+		const requestEntity = await findRequestById(request.requestId)
 		if (!requestEntity) {
 			throw new BadRequestError('Request not found')
 		}
@@ -38,11 +40,15 @@ export class ProofController extends Controller {
 			created_at: new Date(),
 			updated_at: new Date(),
 			proof: request.proof,
-			request_id: request.request_key,
+			request_id: request.requestId,
 			producer_id: userInfo.id,
 			generation_time: new Date().getTime() - requestEntity.created_at.getTime(),
 		}
-		// TODO: validate proof
+		const assignResult = await assign(requestEntity.id!, requestEntity.statement_id)
+		const result = await verify(assignResult, proof.proof)
+		if (!result) {
+			throw new BadRequestError('Proof is not valid')
+		}
 		const saved = await insertProof(proof)
 		logger.info(`save proof - ${saved.id}`)
 		requestEntity.status = RequestStatus.DONE
@@ -66,8 +72,8 @@ export interface ProofItem {
 export interface SubmitProofRequest {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	proof: string,
-	request_key: number,
-	proposal_key: number,
+	requestId: number,
+	proposalId: number,
 }
 
 export interface ProofOwnedItem {
