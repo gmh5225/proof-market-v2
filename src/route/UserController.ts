@@ -4,6 +4,8 @@ import {decodeAuthToken} from '../service/user/hash'
 import * as crypto from 'crypto'
 import {Query} from '@tsoa/runtime/dist/decorators/parameter'
 import {getAddress, verifyMessage} from 'viem'
+import {devMode} from "../config/props";
+import {NotFoundError} from "../handler/error/error";
 
 @Route('/user')
 export class UserController extends Controller {
@@ -37,7 +39,17 @@ export class UserController extends Controller {
 			throw new Error('Invalid signature')
 		}
 		return await authUser(address)
+	}
 
+	// DONE
+	@Post('/mock-auth')
+	public async mockAuth(
+		@Body() request: MockAuthRequest,
+	): Promise<AuthUser> {
+		if (!devMode) {
+			throw new NotFoundError('Not found')
+		}
+		return await authUser(request.address)
 	}
 
 	// DONE
@@ -64,4 +76,8 @@ export interface MetamaskAuthRequest {
 export interface MetamaskAuthMessage {
 	msg: string,
 	expiration: Date,
+}
+
+export interface MockAuthRequest {
+	address: string,
 }

@@ -11,7 +11,8 @@ export const blockchainNode = process.env.BLOCKCHAIN_NODE || 'https://ethereum-s
 export const blockchainChainId = parseInt(process.env.BLOCKCHAIN_CHAIN_ID || '11155111')
 export const blockchainPrivateKey = process.env.BLOCKCHAIN_PRIVATE_KEY || '0xb4f1d55cb2c640305904c085ddf919865510d7da5d1023a919e2330d3db4b055'
 export const blockchainContractAddress = process.env.BLOCKCHAIN_CONTRACT_ADDRESS || '0xd6c12d88BCcD93AC2d326b3d1CCf5b90063884D0'
-export const useDatadog = process.env.USE_DATADOG || true
-export const useOpenTelemetry = process.env.USE_OPENTELEMETRY || false
+export const useDatadog = (process.env.USE_DATADOG || 'true') == 'true'
+export const useOpenTelemetry = (process.env.USE_OPENTELEMETRY || 'false') == 'true'
 export const assignerPath = process.env.ASSIGNER_PATH || './path/to/assigner'
 export const proofGeneratorPath = process.env.PROOF_GENERATOR_PATH || './path/to/generator'
+export const devMode = (process.env.DEV_MODE || 'true') == 'true'
