@@ -61,6 +61,18 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"MockAuthRequest": {
+				"properties": {
+					"address": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"address"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"UserDetails": {
 				"properties": {
 					"id": {
@@ -108,6 +120,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"StatementItemDefinition": {
+				"properties": {
+					"verificationKey": {
+						"type": "string"
+					},
+					"provingKey": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"verificationKey",
+					"provingKey"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"StatementItem": {
 				"properties": {
 					"id": {
@@ -123,20 +151,22 @@
 					"url": {
 						"type": "string"
 					},
-					"input_description": {
+					"inputDescription": {
 						"type": "string"
 					},
 					"type": {
 						"type": "string"
 					},
-					"definition": {}
+					"definition": {
+						"$ref": "#/components/schemas/StatementItemDefinition"
+					}
 				},
 				"required": [
 					"id",
 					"name",
 					"description",
 					"url",
-					"input_description",
+					"inputDescription",
 					"type",
 					"definition"
 				],
@@ -154,7 +184,7 @@
 					"url": {
 						"type": "string"
 					},
-					"input_description": {
+					"inputDescription": {
 						"type": "string"
 					},
 					"type": {
@@ -163,13 +193,15 @@
 					"isPrivate": {
 						"type": "boolean"
 					},
-					"definition": {}
+					"definition": {
+						"$ref": "#/components/schemas/StatementItemDefinition"
+					}
 				},
 				"required": [
 					"name",
 					"description",
 					"url",
-					"input_description",
+					"inputDescription",
 					"type",
 					"isPrivate",
 					"definition"
@@ -531,6 +563,35 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/MetamaskAuthRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/mock-auth": {
+			"post": {
+				"operationId": "MockAuth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthUser"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MockAuthRequest"
 							}
 						}
 					}

@@ -52,6 +52,14 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "MockAuthRequest": {
+        "dataType": "refObject",
+        "properties": {
+            "address": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserDetails": {
         "dataType": "refObject",
         "properties": {
@@ -73,6 +81,15 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StatementItemDefinition": {
+        "dataType": "refObject",
+        "properties": {
+            "verificationKey": {"dataType":"string","required":true},
+            "provingKey": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "StatementItem": {
         "dataType": "refObject",
         "properties": {
@@ -80,9 +97,9 @@ const models: TsoaRoute.Models = {
             "name": {"dataType":"string","required":true},
             "description": {"dataType":"string","required":true},
             "url": {"dataType":"string","required":true},
-            "input_description": {"dataType":"string","required":true},
+            "inputDescription": {"dataType":"string","required":true},
             "type": {"dataType":"string","required":true},
-            "definition": {"dataType":"any","required":true},
+            "definition": {"ref":"StatementItemDefinition","required":true},
         },
         "additionalProperties": false,
     },
@@ -93,10 +110,10 @@ const models: TsoaRoute.Models = {
             "name": {"dataType":"string","required":true},
             "description": {"dataType":"string","required":true},
             "url": {"dataType":"string","required":true},
-            "input_description": {"dataType":"string","required":true},
+            "inputDescription": {"dataType":"string","required":true},
             "type": {"dataType":"string","required":true},
             "isPrivate": {"dataType":"boolean","required":true},
-            "definition": {"dataType":"any","required":true},
+            "definition": {"ref":"StatementItemDefinition","required":true},
         },
         "additionalProperties": false,
     },
@@ -278,6 +295,31 @@ export function RegisterRoutes(router: KoaRouter) {
             const controller = new UserController();
 
             const promise = controller.metamaskAuth.apply(controller, validatedArgs as any);
+            return promiseHandler(controller, promise, context, undefined, undefined);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        router.post('/user/mock-auth',
+            ...(fetchMiddlewares<Middleware>(UserController)),
+            ...(fetchMiddlewares<Middleware>(UserController.prototype.mockAuth)),
+
+            async function UserController_mockAuth(context: any, next: any) {
+            const args = {
+                    request: {"in":"body","name":"request","required":true,"ref":"MockAuthRequest"},
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+              validatedArgs = getValidatedArgs(args, context, next);
+            } catch (err) {
+              const error = err as any;
+              error.message ||= JSON.stringify({ fields: error.fields });
+              context.status = error.status;
+              context.throw(context.status, error.message, error);
+            }
+
+            const controller = new UserController();
+
+            const promise = controller.mockAuth.apply(controller, validatedArgs as any);
             return promiseHandler(controller, promise, context, undefined, undefined);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

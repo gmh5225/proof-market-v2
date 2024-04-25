@@ -55,10 +55,11 @@ export function buildApp() {
 	return app
 }
 
-export async function startApp() {
+export async function startApp(): Promise<Koa> {
 	await migrateDb()
 	const app = buildApp()
 	initTasks()
 
 	app.listen(80)
+	return app
 }
