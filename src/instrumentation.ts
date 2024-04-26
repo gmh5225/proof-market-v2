@@ -22,7 +22,7 @@ import logger from './logger'
  * @param serviceName The name of the service for which tracing is being set up
  */
 export const setupTracing = (serviceName: string) => {
-	if (useDatadog === 'true') {
+	if (useDatadog) {
 		// TODO: For deployment, consider adding env variables for `url`, or `hostname` and `port`
 		tracer.init({
 			logInjection: true,
@@ -33,7 +33,7 @@ export const setupTracing = (serviceName: string) => {
 		logger.info('Use datadog tracer')
 	}
 
-	if (useOpenTelemetry === 'true') {
+	if (useOpenTelemetry) {
 		// TODO: The JaegerAgent is being deprecated (see: https://github.com/jaegertracing/jaeger/issues/4739).
 		// Refer to the Jaeger documentation on architecture (https://www.jaegertracing.io/docs/1.55/architecture/#agent)
 		// to understand the necessary adjustments for this deprecation.
@@ -58,7 +58,7 @@ export const setupTracing = (serviceName: string) => {
 		logger.info('Use opentelemetry tracer')
 	}
 
-	if (useDatadog !== 'true' && useOpenTelemetry !== 'true') {
+	if (useDatadog && useOpenTelemetry) {
 		logger.info('No tracer is used.')
 	}
 }
