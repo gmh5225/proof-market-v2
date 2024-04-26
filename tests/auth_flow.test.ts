@@ -21,6 +21,7 @@ describe('auth flow', () => {
 			.send()
 			.expect(200)
 		const message = messageResponse.body.msg
+		// const message = "proof_market_0x1B5891A8008569866Ed7Da008f14d685292E84cd_8d50cccdb9529be7bc6c02d9128b04a1_1714147488121"
 
 		const walletClient = privateKeyToAccount("0xb4f1d55cb2c640305904c085ddf919865510d7da5d1023a919e2330d3db4b055")
 		const signature = await walletClient.signMessage({
