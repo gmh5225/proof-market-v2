@@ -6,78 +6,79 @@ import {Query} from '@tsoa/runtime/dist/decorators/parameter'
 import {getAddress, verifyMessage} from 'viem'
 import {devMode} from "../config/props";
 import {NotFoundError} from "../handler/error/error";
+import {Hex} from "viem/types/misc";
 
 @Route('/user')
 export class UserController extends Controller {
 
-	// DONE
-	@Get('/metamask/message')
-	public async metamaskAuthMessage(
-		@Query('address') address: string,
-	): Promise<MetamaskAuthMessage> {
-		const nonce = crypto.randomBytes(16).toString('hex')
-		const expiration = new Date(new Date().getTime() + (60 * 60 * 1000))
-		const msg = `proof_market_${address}_${nonce}_${expiration}`
-		return {
-			msg: msg,
-			expiration: expiration,
-		}
-	}
+    // DONE
+    @Get('/metamask/message')
+    public async metamaskAuthMessage(
+        @Query('address') address: string,
+    ): Promise<MetamaskAuthMessage> {
+        const nonce = crypto.randomBytes(16).toString('hex')
+        const expiration = new Date(new Date().getTime() + (60 * 60 * 1000))
+        const msg = `proof_market_${address}_${nonce}_${expiration.getTime()}`
+        return {
+            msg: msg,
+            expiration: expiration,
+        }
+    }
 
-	// DONE
-	@Post('/metamask')
-	public async metamaskAuth(
-		@Body() request: MetamaskAuthRequest,
-	): Promise<AuthUser> {
-		const address = getAddress(request.addressRaw)
-		const isValid = await verifyMessage({
-			address: address,
-			message: request.msg,
-			signature: `0x${request.signRaw}`,
-		})
-		if (!isValid) {
-			throw new Error('Invalid signature')
-		}
-		return await authUser(address)
-	}
+    // DONE
+    @Post('/metamask')
+    public async metamaskAuth(
+        @Body() request: MetamaskAuthRequest,
+    ): Promise<AuthUser> {
+        const address = getAddress(request.addressRaw)
+        const isValid = await verifyMessage({
+            address: address,
+            message: request.msg,
+            signature: ((request.signRaw.startsWith("0x")) ? request.signRaw : `0x${request.signRaw}`) as Hex,
+        })
+        if (!isValid) {
+            throw new Error('Invalid signature')
+        }
+        return await authUser(address)
+    }
 
-	// DONE
-	@Post('/mock-auth')
-	public async mockAuth(
-		@Body() request: MockAuthRequest,
-	): Promise<AuthUser> {
-		if (!devMode) {
-			throw new NotFoundError('Not found')
-		}
-		return await authUser(request.address)
-	}
+    // DONE
+    @Post('/mock-auth')
+    public async mockAuth(
+        @Body() request: MockAuthRequest,
+    ): Promise<AuthUser> {
+        if (!devMode) {
+            throw new NotFoundError('Not found')
+        }
+        return await authUser(request.address)
+    }
 
-	// DONE
-	@Get('/info')
-	public async me(
-		@Header('Authorization') jwt: string | undefined,
-	): Promise<UserDetails> {
-		return userDetails(decodeAuthToken(jwt).id)
-	}
+    // DONE
+    @Get('/info')
+    public async me(
+        @Header('Authorization') jwt: string | undefined,
+    ): Promise<UserDetails> {
+        return userDetails(decodeAuthToken(jwt).id)
+    }
 }
 
 export interface PayRequest {
-	sender: number,
-	receiver: number,
-	amount: number,
+    sender: number,
+    receiver: number,
+    amount: number,
 }
 
 export interface MetamaskAuthRequest {
-	msg: string,
-	signRaw: string,
-	addressRaw: string,
+    msg: string,
+    signRaw: string,
+    addressRaw: string,
 }
 
 export interface MetamaskAuthMessage {
-	msg: string,
-	expiration: Date,
+    msg: string,
+    expiration: Date,
 }
 
 export interface MockAuthRequest {
-	address: string,
+    address: string,
 }

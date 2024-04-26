@@ -16,3 +16,4 @@ export const useOpenTelemetry = (process.env.USE_OPENTELEMETRY || 'false') == 't
 export const assignerPath = process.env.ASSIGNER_PATH || './path/to/assigner'
 export const proofGeneratorPath = process.env.PROOF_GENERATOR_PATH || './path/to/generator'
 export const devMode = (process.env.DEV_MODE || 'true') == 'true'
+export const logInFile = (process.env.LOG_IN_FILE || 'false') == 'true'
